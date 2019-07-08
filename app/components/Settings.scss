@@ -1,0 +1,62 @@
+.style_setting {
+  margin-bottom: 30px;
+}
+
+.duration {
+  .runlabel {
+    margin-top: 3px;
+    display: inline-block;
+    width: 180px;
+  }
+  h4 {
+    display: inline;
+  }
+  margin-bottom: 20px;
+}
+
+.durinput {
+  display: inline-block !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+  width: 80px !important;
+}
+
+.cardcontent {
+  margin-top: 20px;
+  height: calc(100vh - 260px);
+}
+
+.targetcontent {
+  margin-top: 10px;
+  height: calc(50vh - 173px);
+}
+
+.targetbox {
+  color: black !important;
+  height: calc(100% - 30px) !important;
+}
+
+.target_container {
+  margin-top: 30px;
+  display: inline-block;
+}
+
+.target {
+  .label {
+    margin-top: 3px;
+    display: inline-block;
+    margin-right: 30px;
+    width: 120px;
+  }
+  h4 {
+    display: inline;
+  }
+  margin-bottom: 10px;
+}
+
+.actionbutton {
+  display: inline-block;
+  position: absolute;
+  left: 275px;
+  top: 445px;
+}
