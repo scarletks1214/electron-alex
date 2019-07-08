@@ -20,7 +20,7 @@ let myTargets = [
   "electron",
   "https://www.youtube.com/watch?v=OHa0-BlGMLg",
   "stripe api",
-  'google api',
+  "google api",
   "https://www.youtube.com/watch?v=1PkJjcNHZJY",
   "https://www.youtube.com/watch?v=h4qwZvIYswQ",
   "https://www.youtube.com/watch?v=HZi9ls9emUE",
@@ -29,24 +29,24 @@ let myTargets = [
   "mongodb",
   "https://www.youtube.com/watch?v=wcRYNLSHVm4",
   "https://www.youtube.com/watch?v=tmdfocdE98M",
-  'mysql',
+  "mysql",
   "https://www.youtube.com/watch?v=4zNAYGiJo5M",
-  'postgresql',
-  'what is github',
+  "postgresql",
+  "what is github",
   "https://www.youtube.com/watch?v=ikCOmABqEPQ",
   "https://www.youtube.com/watch?v=s8aRC-7sBo8",
-  'what is b2b',
+  "what is b2b",
   "https://www.youtube.com/watch?v=CsI4VxJ1IBQ",
-  'when do you say nope',
+  "when do you say nope",
   "https://www.youtube.com/watch?v=7uA0bk5AOyw",
   "https://www.youtube.com/watch?v=1u3jXdkwLdQ",
   "https://www.youtube.com/watch?v=eBmAkIdLWYs",
-  'graphql',
+  "graphql",
   "https://www.youtube.com/watch?v=HZi9ls9emUE",
   "https://www.youtube.com/watch?v=zeuLMV6MgeU",
-  'stripe google',
-  'https://www.youtube.com/watch?v=tawOwZvfZNw',
-  'youtube',
+  "stripe google",
+  "https://www.youtube.com/watch?v=tawOwZvfZNw",
+  "youtube",
   "css margin",
   "https://www.youtube.com/watch?v=3W151Vp3Y0w",
   "scss properties",
@@ -98,9 +98,7 @@ options.addArguments(
   "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
 );
 
-const path = require("chromedriver").path;
-console.log(path);
-const service = new chrome.ServiceBuilder("./chromedriver").build();
+const service = new chrome.ServiceBuilder(require("chromedriver").path).build();
 chrome.setDefaultService(service);
 
 app.use(bodyParser());
@@ -166,9 +164,9 @@ let tasks = tress((task, callback) => {
   drivers.push({ email: task.email, driver });
 
   function domCheck(type) {
-    return new Promise(function (resolve, reject) {
-      var rscheck = setInterval(function () {
-        driver.executeScript("return document.readyState").then(function (rs) {
+    return new Promise(function(resolve, reject) {
+      var rscheck = setInterval(function() {
+        driver.executeScript("return document.readyState").then(function(rs) {
           if (type == undefined) {
             if (rs == "interactive" || rs == "complete") {
               clearInterval(rscheck);
@@ -204,11 +202,15 @@ let tasks = tress((task, callback) => {
       await driver.wait(until.elementLocated(By.id("identifierId")));
       await driver.sleep(1000);
       try {
-        await driver.findElement({ id: "identifierId" }).sendKeys(task.email, Key.RETURN);
+        await driver
+          .findElement({ id: "identifierId" })
+          .sendKeys(task.email, Key.RETURN);
       } catch (e) {
         await driver.wait(until.elementLocated(By.id("identifierId")));
         await driver.sleep(1000);
-        await driver.findElement({ id: "identifierId" }).sendKeys(task.email, Key.RETURN);
+        await driver
+          .findElement({ id: "identifierId" })
+          .sendKeys(task.email, Key.RETURN);
       }
 
       await driver.wait(
@@ -222,14 +224,17 @@ let tasks = tress((task, callback) => {
         return new Promise((res, rej) => {
           const id = setInterval(async () => {
             try {
-              await driver.findElement(By.xpath('//*[@id="password"]/div[1]/div/div[1]/input')).sendKeys(task.password, Key.RETURN);
+              await driver
+                .findElement(
+                  By.xpath('//*[@id="password"]/div[1]/div/div[1]/input')
+                )
+                .sendKeys(task.password, Key.RETURN);
               clearInterval(id);
-              res(true)
-            } catch (e) {
-            }
-          }, 1000)
-        })
-      }
+              res(true);
+            } catch (e) {}
+          }, 1000);
+        });
+      };
 
       await inputPassword();
       await domCheck("complete");
@@ -255,14 +260,24 @@ let tasks = tress((task, callback) => {
             driver.getCurrentUrl().then(url => url !== "https://a.com/")
           );
           if (target.includes("https://www.youtube.com") && youtube) {
-            console.log("youtube video watching ....", target, task.email, Date(Date.now()));
+            console.log(
+              "youtube video watching ....",
+              target,
+              task.email,
+              Date(Date.now())
+            );
             await driver.get(target);
             await domCheck("complete");
             await driver.sleep(
               randomMsSec(youtube_duration_min, youtube_duration_max)
             );
           } else if (gsearch) {
-            console.log("Google bulk ad keyword searching ....", target, task.email, Date(Date.now()));
+            console.log(
+              "Google bulk ad keyword searching ....",
+              target,
+              task.email,
+              Date(Date.now())
+            );
             await driver.get("https://www.google.com");
             await domCheck("complete");
             await driver.wait(until.elementLocated(By.name("q")));
@@ -270,12 +285,12 @@ let tasks = tress((task, callback) => {
             let input;
             try {
               input = await driver.findElement(By.name("q"));
-              input.sendKeys(target, Key.RETURN)
+              input.sendKeys(target, Key.RETURN);
             } catch (e) {
               await driver.wait(until.elementLocated(By.name("q")));
               await driver.sleep(1000);
               input = await driver.findElement(By.name("q"));
-              input.sendKeys(target, Key.RETURN)
+              input.sendKeys(target, Key.RETURN);
             }
 
             await domCheck("complete");
@@ -305,18 +320,20 @@ let tasks = tress((task, callback) => {
         }
       }
 
-      console.log('logging out ....');
+      console.log("logging out ....");
       for (let i = 0; i < 3; i++) {
-        await driver.executeScript("window.scrollBy(200, 0)", '');
+        await driver.executeScript("window.scrollBy(200, 0)", "");
         await driver.sleep(100);
       }
       await driver.sleep(500);
-      console.log('waiting ....')
-      await driver.wait(until.elementLocated({ css: 'a[class="gb_x gb_Ea gb_f"]' }));
+      console.log("waiting ....");
+      await driver.wait(
+        until.elementLocated({ css: 'a[class="gb_x gb_Ea gb_f"]' })
+      );
       await driver.findElement({ css: 'a[class="gb_x gb_Ea gb_f"]' }).click();
       await driver.sleep(1000);
-      await driver.findElement({ id: 'gb_71' }).click();
-      await domCheck('complete');
+      await driver.findElement({ id: "gb_71" }).click();
+      await domCheck("complete");
       await driver.sleep(2000);
       crt_tasks.splice(crt_tasks.findIndex(tsk => tsk.email === task.email), 1);
       drivers.splice(
@@ -341,10 +358,7 @@ tasks.drain = () => {
 tasks.error = (err, email) => {
   console.log(err + email);
   crt_tasks.splice(crt_tasks.findIndex(tsk => tsk.email === email), 1);
-  drivers.splice(
-    drivers.findIndex(driver => driver.email === email),
-    1
-  );
+  drivers.splice(drivers.findIndex(driver => driver.email === email), 1);
 };
 
 tasks.success = email => {
