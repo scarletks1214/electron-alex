@@ -10,46 +10,11 @@ import {
 import { ACCOUNT } from "../reducers/types";
 import axios from "axios";
 
-function* startTask(action) {
-  try {
-    console.log("startTask", action.record);
-    const res = yield axios.post(
-      "http://localhost:5000/addtask",
-      { task: action.record },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    console.log("success", res);
-  } catch (e) {
-    console.log("error", e);
-  }
-}
-
-function* stopTask(action) {
-  try {
-    const res = yield axios.post(
-      "http://localhost:5000/stoptask",
-      { task: action.record },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    console.log("success", res);
-  } catch (e) {
-    console.log("error", e);
-  }
-}
-
 function* checkOne(ipaddr, port, username, password) {
   try {
     console.log("checkone", ipaddr, port);
     const res = yield axios.post(
-      "http://localhost:5000/checkproxy",
+      "http://localhost:5011/checkproxy",
       {
         myProxy: `${ipaddr}:${port}`,
         username,
@@ -168,11 +133,7 @@ function* checkValid() {
 }
 
 function* accountSaga() {
-  yield all([
-    takeLatest(ACCOUNT.START_TASK, startTask),
-    takeLatest(ACCOUNT.STOP_TASK, stopTask),
-    fork(checkValid)
-  ]);
+  yield all([fork(checkValid)]);
 }
 
 export default accountSaga;

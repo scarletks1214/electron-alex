@@ -28,10 +28,18 @@ export default function accountReducer(state = initialState, action) {
 
       if (field.startsWith("actions")) {
         data[index].actions[parseInt(field[field.length - 1])] = value;
-        if (value === true) data[index].started = true;
       } else {
         data[index][field] = value;
       }
+      return {
+        ...state,
+        accountList: data,
+        changed: !state.changed
+      };
+    case ACCOUNT.CHANGEONECLICK:
+      index = data.findIndex(item => item.email === action.email);
+      data[index].oneclick += parseFloat(action.value);
+      console.log("change oneclick", data[index].oneclick);
       return {
         ...state,
         accountList: data,
@@ -63,7 +71,12 @@ export default function accountReducer(state = initialState, action) {
       };
     case ACCOUNT.CHECKVALID_REQUEST:
       console.log("234234234");
-      return { ...state, addedRows: false, confirmLoading: true };
+      return {
+        ...state,
+        addedRows: false,
+        confirmLoading: true,
+        changed: !state.changed
+      };
     case ACCOUNT.CHECKVALID_END:
       let newkey = data && data.length > 0 ? data[0].key : -1;
       const newAccounts = action.newAccounts.reverse();
@@ -79,10 +92,9 @@ export default function accountReducer(state = initialState, action) {
             category: account.category ? account.category : "None",
             actionlog: "",
             enabled: true,
-            oneclick: 0,
+            oneclick: 0.0,
             actions: [true, true],
-            edit: true,
-            started: false
+            edit: true
           };
           if (account.category && categories.indexOf(account.category) === -1) {
             categories.push(account.category);

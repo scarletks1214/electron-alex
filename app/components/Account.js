@@ -10,6 +10,7 @@ const TextArea = Input.TextArea;
 const remote = require("electron").remote;
 const dialog = remote.dialog;
 const fs = require("fs");
+const ipcRenderer = require("electron").ipcRenderer;
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -137,15 +138,11 @@ export default class Account extends React.Component {
 
   startAll = () => {
     this.props.accounts.forEach(acc => {
-      if (acc.enabled) {
+      if (acc.enabled && acc.actions[0]) {
         this.props.changeField(acc.key, "actions-0", false);
-        this.props.startTask(acc);
-        if (!acc.started) {
-          setInterval(() => {
-            if (acc.actionlog === "Marinating")
-              this.props.changeField(acc.key, "oneclick", acc.oneclick + 1);
-          }, 100000);
-        }
+        ipcRenderer.send("startTask", acc);
+        acc.oneclick = 0;
+        acc.actions[1] = true;
       }
     });
   };
@@ -154,7 +151,7 @@ export default class Account extends React.Component {
     this.props.accounts.forEach(acc => {
       if (acc.enabled) {
         this.props.changeField(acc.key, "actions-0", true);
-        this.props.stopTask(acc);
+        ipcRenderer.send("stopTask", acc);
       }
     });
   };
@@ -164,6 +161,7 @@ export default class Account extends React.Component {
   };
 
   render() {
+    console.log("confirmloading", this.props.confirmLoading);
     return (
       <Spin
         spinning={this.props.confirmLoading && !this.state.addingNow}
@@ -245,8 +243,8 @@ export default class Account extends React.Component {
               this.props.currentCategory === "All"
                 ? this.props.accounts
                 : this.props.accounts.filter(
-                  acc => acc.category === this.props.currentCategory
-                )
+                    acc => acc.category === this.props.currentCategory
+                  )
             }
             changeField={this.props.changeField}
             changeRow={this.props.changeRow}

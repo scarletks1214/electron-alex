@@ -15,6 +15,8 @@ import {
 import ButtonGroup from "antd/lib/button/button-group";
 import TextArea from "antd/lib/input/TextArea";
 
+const ipcRenderer = require("electron").ipcRenderer;
+
 class DurationArea extends React.Component {
   render() {
     return (
@@ -175,6 +177,12 @@ export default class Settings extends React.Component {
   saveTo = () => {
     const { duration, maxProfile, gsearch, youtube } = this.state;
     this.props.changeAll(duration, maxProfile, gsearch, youtube);
+    ipcRenderer.send("changeSetting", {
+      duration,
+      maxProfile,
+      gsearch,
+      youtube
+    });
   };
   setCheck = (which, mode) => {
     if (which == "theme") {

@@ -3,6 +3,8 @@ import "antd/dist/antd.css";
 import styles from "./Account.scss";
 import { ScaleLoader } from "react-spinners";
 
+const ipcRenderer = require("electron").ipcRenderer;
+
 import {
   Table,
   Input,
@@ -32,10 +34,14 @@ class ProxySelect extends React.Component {
         <Option value="None">None</Option>
         {this.props.proxies.map((proxy, index) => {
           let prx = `${proxy.ipaddr}:${proxy.port}`;
-          if (proxy.username && proxy.username !== '') {
+          if (proxy.username && proxy.username !== "") {
             prx = `${proxy.username}:${proxy.password}@` + prx;
           }
-          return <Option key={index} value={prx}>{prx}</Option>
+          return (
+            <Option key={index} value={prx}>
+              {prx}
+            </Option>
+          );
         })}
       </Select>
     );
@@ -87,13 +93,13 @@ class EditableCell extends React.Component {
               rules: [
                 dataIndex == "email"
                   ? {
-                    required: true,
-                    type: "email",
-                    message: `Please Input Valid Email!`
-                  }
+                      required: true,
+                      type: "email",
+                      message: `Please Input Valid Email!`
+                    }
                   : dataIndex == "proxy"
-                    ? { required: true, message: `Please Select ${title}!` }
-                    : {
+                  ? { required: true, message: `Please Select ${title}!` }
+                  : {
                       required: true,
                       message: `Please Input ${title}!`
                     }
@@ -102,8 +108,8 @@ class EditableCell extends React.Component {
             })(this.getInput(form))}
           </Form.Item>
         ) : (
-            children
-          )}
+          children
+        )}
       </td>
     );
   };
@@ -177,39 +183,12 @@ class EditableTable extends React.Component {
       render: (oneclick, record) => (
         <Progress
           type="circle"
-          percent={oneclick % 100}
+          percent={oneclick}
           width={40}
           format={() => {
-            if (oneclick === 0)
-              return (
-                <Icon
-                  type="close"
-                  style={{ color: "red", fontStyle: "bold" }}
-                />
-              );
-            return (
-              <div>
-                {oneclick >= 100 ? (
-                  Array(Math.floor(oneclick / 100))
-                    .fill(1)
-                    .map((value, index) => (
-                      <Icon
-                        key={index}
-                        type="check"
-                        style={{ color: "green", fontSize: "8px" }}
-                      />
-                    ))
-                ) : (
-                    <Icon
-                      type="close"
-                      style={{ color: "red", fontSize: "8px" }}
-                    />
-                  )}
-                <p style={{ fontSize: "10px", marginBottom: "3px" }}>
-                  {oneclick + "%"}
-                </p>
-              </div>
-            );
+            if (oneclick < 100)
+              return <Icon type="close" style={{ color: "red" }} />;
+            return <Icon type="check" style={{ color: "green" }} />;
           }}
         />
       )
@@ -221,7 +200,8 @@ class EditableTable extends React.Component {
       key: "actions",
       render: (actions, record) => (
         <div>
-          {record.actionlog === "Marinating" && (
+          {(record.actionlog === "Marinating" ||
+            record.actionlog === "Logging in") && (
             <ScaleLoader color="#1890ff" height={18} width={3} />
           )}
           <a
@@ -229,27 +209,41 @@ class EditableTable extends React.Component {
             onClick={() => {
               this.props.changeField(record.key, "actions-0", !actions[0]);
               if (!actions[0]) {
-                this.props.startTask(record);
-                if (!record.started) {
-                  setInterval(() => {
-                    if (record.actionlog === "Marinating")
-                      this.props.changeField(
-                        record.key,
-                        "oneclick",
-                        record.oneclick + 1
-                      );
-                  }, 100000);
-                }
+                ipcRenderer.send("startTask", record);
+                record.oneclick = 0;
+                record.actions[1] = true;
               } else {
-                this.props.stopTask(record);
+                ipcRenderer.send("stopTask", record);
               }
             }}
           >
             {actions[0] ? (
               <Icon type="play-circle" className={styles.play} />
             ) : (
-                <Icon type="pause-circle" className={styles.play} />
-              )}
+              <Icon type="pause-circle" className={styles.play} />
+            )}
+          </a>
+          <a
+            disabled={
+              this.props.editingKey == record.key ||
+              !record.enabled ||
+              record.actions[0] ||
+              record.actionlog === "Scheduling"
+            }
+            onClick={() => {
+              this.props.changeField(record.key, "actions-1", !actions[1]);
+              if (!actions[1]) {
+                ipcRenderer.send("hideTask", record);
+              } else {
+                ipcRenderer.send("showTask", record);
+              }
+            }}
+          >
+            {actions[1] ? (
+              <Icon type="eye" className={styles.eyeball} />
+            ) : (
+              <Icon type="eye-invisible" className={styles.eyeball} />
+            )}
           </a>
         </div>
       )
@@ -286,29 +280,19 @@ class EditableTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-              <a
-                disabled={
-                  this.props.editingKey !== -1 ||
-                  !record.actions[0] ||
-                  record.actionlog !== ""
-                }
-                onClick={() => this.edit(record.key)}
-              >
-                <Icon type="edit" className={styles.editicon} />
-              </a>
-            )}
+            <a
+              disabled={this.props.editingKey !== -1 || !record.actions[0]}
+              onClick={() => this.edit(record.key)}
+            >
+              <Icon type="edit" className={styles.editicon} />
+            </a>
+          )}
           {
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => this.props.deleteRow(record.key)}
             >
-              <a
-                disabled={
-                  this.props.editingKey !== -1 ||
-                  !record.actions[0] ||
-                  record.actionlog !== ""
-                }
-              >
+              <a disabled={this.props.editingKey !== -1 || !record.actions[0]}>
                 <Icon type="delete" className={styles.deleteicon} />
               </a>
             </Popconfirm>

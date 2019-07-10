@@ -10,6 +10,7 @@
     "body-parser": "^1.19.0",
     "check-proxy": "^0.3.3",
     "chromedriver": "^75.0.0",
+    "electron": "^6.0.0-beta.12",
     "express": "^4.17.1",
     "geckodriver": "^1.16.2",
     "needle": "^2.4.0",

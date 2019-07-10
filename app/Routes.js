@@ -51,7 +51,7 @@ class Routes extends React.Component<Props> {
 
   // eslint-disable-next-line no-unused-vars
   onClickNavigation = ({ item, key, keyPath }) => {
-    if (this.state.selectedIndex.toString() !== keyPath) {
+    if (this.state.selectedIndex + "" != keyPath) {
       const { history } = this.props;
       this.setState({ selectedIndex: keyPath });
       console.log(page_title[keyPath]);
@@ -83,7 +83,7 @@ class Routes extends React.Component<Props> {
               className={styles.antmenu}
               theme={this.props.theme}
               mode="inline"
-              defaultSelectedKeys={["0"]}
+              selectedKeys={[this.state.selectedIndex + ""]}
               onClick={this.onClickNavigation}
             >
               {this.items.map((item, index) => (
@@ -122,7 +122,7 @@ class Routes extends React.Component<Props> {
                 className={styles.antmenu}
                 theme={this.props.theme}
                 mode="horizontal"
-                defaultSelectedKeys={["0"]}
+                selectedKeys={[this.state.selectedIndex + ""]}
                 onClick={this.onClickNavigation}
               >
                 {this.items.map((item, index) => (

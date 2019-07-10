@@ -17,7 +17,8 @@ export const ACCOUNT = createActionTypes("ACCOUNT", [
   "CANCEL_CHECK",
   "START_TASK",
   "STOP_TASK",
-  "CHANGECATEGORY"
+  "CHANGECATEGORY",
+  "CHANGEONECLICK"
 ]);
 
 export const PROXY = createActionTypes("PROXY", [

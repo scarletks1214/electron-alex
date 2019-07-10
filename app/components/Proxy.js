@@ -161,7 +161,7 @@ export default class Proxy extends React.Component {
           />
         </div>
         <Modal
-          title="Add new porixes ..."
+          title="Add new proxies ..."
           visible={this.state.addingNow}
           onOk={this.addRows}
           onCancel={() => this.setAddingNow(false)}

@@ -279,6 +279,30 @@ eval("module.exports = less-loader;\n\n//# sourceURL=webpack://renderer/external
 
 /***/ }),
 
+/***/ "nightmare":
+/*!****************************!*\
+  !*** external "nightmare" ***!
+  \****************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = nightmare;\n\n//# sourceURL=webpack://renderer/external_%22nightmare%22?");
+
+/***/ }),
+
+/***/ "nightmare-wait-for-url":
+/*!*****************************************!*\
+  !*** external "nightmare-wait-for-url" ***!
+  \*****************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = nightmare-wait-for-url;\n\n//# sourceURL=webpack://renderer/external_%22nightmare-wait-for-url%22?");
+
+/***/ }),
+
 /***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
@@ -468,6 +492,18 @@ eval("module.exports = source-map-support;\n\n//# sourceURL=webpack://renderer/e
 /***/ (function(module, exports) {
 
 eval("module.exports = sqlite3;\n\n//# sourceURL=webpack://renderer/external_%22sqlite3%22?");
+
+/***/ }),
+
+/***/ "wait-until":
+/*!*****************************!*\
+  !*** external "wait-until" ***!
+  \*****************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = wait-until;\n\n//# sourceURL=webpack://renderer/external_%22wait-until%22?");
 
 /***/ })
 

@@ -14,7 +14,7 @@ function* checkOne(ipaddr, port, username, password) {
   try {
     console.log("checkone", ipaddr, port);
     const res = yield axios.post(
-      "http://localhost:5000/checkproxy",
+      "http://localhost:5011/checkproxy",
       {
         myProxy: `${ipaddr}:${port}`,
         username,
