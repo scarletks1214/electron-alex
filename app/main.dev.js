@@ -81,7 +81,10 @@ app.on("ready", async () => {
     minWidth: 1280,
     minHeight: 720,
     width: 1280,
-    height: 720
+    height: 720,
+    frame: false,
+    titleBarStyle: "border-radius: 50px",
+    transparent: true
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -144,4 +147,8 @@ ipcMain.on("changeSetting", async (event, data) => {
     data.gsearch,
     data.youtube
   );
+});
+
+ipcMain.on("closeWindow", () => {
+  app.quit();
 });

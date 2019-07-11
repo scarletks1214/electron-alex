@@ -15,7 +15,7 @@ import AccountPage from "./containers/AccountPage";
 import ProxyPage from "./containers/ProxyPage";
 
 import styles from "./App.scss";
-//import "antd/dist/antd.css";
+const ipcRenderer = require("electron").ipcRenderer;
 
 const { Header, Sider, Content } = Layout;
 
@@ -41,6 +41,10 @@ class Routes extends React.Component<Props> {
   state = {
     collapsed: false,
     selectedIndex: 0
+  };
+
+  closeWindow = () => {
+    ipcRenderer.send("closeWindow");
   };
 
   toggle = () => {
@@ -133,10 +137,9 @@ class Routes extends React.Component<Props> {
                 ))}
               </Menu>
             )}
-            <Icon
-              type={this.items[this.state.selectedIndex].icon}
-              className={styles.itemicon}
-            />
+            <a onClick={this.closeWindow} className={styles.itemicon}>
+              <Icon type="poweroff" />
+            </a>
           </Header>
           <Content
             style={{

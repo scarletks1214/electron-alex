@@ -128,8 +128,8 @@ const paused_bots = [];
 
 let min_slp = 2;
 let max_slp = 3;
-let min_run = 4;
-let max_run = 6;
+let min_run = 0.5;
+let max_run = 1;
 let max_profiles = 1;
 let gsearch = true;
 let youtube = true;

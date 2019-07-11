@@ -132,7 +132,7 @@ export default class Account extends React.Component {
 
   disableAll = () => {
     this.props.accounts.forEach(acc => {
-      this.props.changeField(acc.key, "enabled", false);
+      if (acc.actions[0]) this.props.changeField(acc.key, "enabled", false);
     });
   };
 
