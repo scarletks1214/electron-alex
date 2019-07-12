@@ -196,6 +196,24 @@ class EditableTable extends React.Component {
   ];
   constructor(props) {
     super(props);
+    this.state = {
+      width: 0,
+      height: 0
+    };
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
   isEditing = record => record.key === this.props.editingKey;
@@ -247,11 +265,8 @@ class EditableTable extends React.Component {
           dataSource={this.props.data}
           columns={columns}
           rowClassName="editable-row"
-          pagination={{
-            //onChange: this.cancel,
-            pageSize: 5,
-            pagination: false
-          }}
+          pagination={false}
+          scroll={{ y: this.state.height - 250 }}
         />
       </EditableContext.Provider>
     );

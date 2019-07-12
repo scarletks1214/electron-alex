@@ -30,3 +30,25 @@ a:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+.ant-btn {
+  border-radius: 3px !important;
+  margin-right: 7px;
+  border: 1px solid #d9d9d9 !important;
+}
+
+.ant-btn-primary {
+  border: none !important;
+}
+
+.ant-table-header {
+  overflow: hidden !important;
+  height: 70px;
+}
+
+.ant-input-search {
+  .ant-input {
+    border-radius: 20px;
+    background: #f5f5f5;
+  }
+}

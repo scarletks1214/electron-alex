@@ -54,6 +54,14 @@
   }
 }
 
+.exportbutton {
+  background: green !important;
+  margin-left: 10px;
+  &:hover {
+    background: rgba(0, 150, 0, 0.9) !important;
+  }
+}
+
 .closeicon {
   font-size: 16px;
   margin-left: -4px;

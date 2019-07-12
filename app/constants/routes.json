@@ -1,5 +1,6 @@
 {
   "AccountPage": "/",
   "ProxyPage": "/proxy",
+  "BillingPage": "/billing",
   "SettingPage": "/setting"
 }

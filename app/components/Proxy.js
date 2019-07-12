@@ -132,19 +132,17 @@ export default class Proxy extends React.Component {
               New
             </Button>
             <Button
-              type="primary"
               disabled={this.props.editingKey !== -1}
               onClick={this.importProxies}
             >
-              <Icon type="import" />
+              <Icon type="rocket" />
               Import
             </Button>
             <Button
-              type="primary"
               disabled={this.props.editingKey !== -1}
               onClick={this.exportProxies}
             >
-              <Icon type="export" />
+              <Icon type="download" />
               Export
             </Button>
           </ButtonGroup>

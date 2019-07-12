@@ -2,8 +2,8 @@
 import { SETTINGS } from "./types";
 
 const initialState = {
-  theme: "dark",
-  navigation: "side",
+  theme: "light",
+  navigation: "noside",
   duration: {
     run: {
       min: 15,

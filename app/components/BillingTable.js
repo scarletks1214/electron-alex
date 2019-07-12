@@ -124,17 +124,17 @@ class EditableCell extends React.Component {
 class EditableTable extends React.Component {
   columns = [
     {
-      title: "Category",
+      title: "Profile Name",
       align: "center",
-      dataIndex: "category",
-      key: "category",
+      dataIndex: "profilename",
+      key: "profilename",
       editable: true
     },
     {
-      title: "Email",
+      title: "Full Name",
       align: "center",
-      dataIndex: "email",
-      key: "email",
+      dataIndex: "fullname",
+      key: "fullname",
       editable: true
     },
     {

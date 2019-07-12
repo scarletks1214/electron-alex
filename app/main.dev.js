@@ -152,3 +152,7 @@ ipcMain.on("changeSetting", async (event, data) => {
 ipcMain.on("closeWindow", () => {
   app.quit();
 });
+
+ipcMain.on("miniWindow", () => {
+  mainWindow.minimize();
+});

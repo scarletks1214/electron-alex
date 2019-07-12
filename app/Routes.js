@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import SettingsPage from "./containers/SettingsPage";
 import AccountPage from "./containers/AccountPage";
 import ProxyPage from "./containers/ProxyPage";
+import BillingPage from "./containers/BillingPage";
 
 import styles from "./App.scss";
 const ipcRenderer = require("electron").ipcRenderer;
@@ -20,7 +21,7 @@ const ipcRenderer = require("electron").ipcRenderer;
 const { Header, Sider, Content } = Layout;
 
 type Props = { history: Object };
-const page_title = ["/", "/proxy", "/setting"];
+const page_title = ["/", "/proxy", "/billing", "/setting"];
 
 class Routes extends React.Component<Props> {
   items = [
@@ -31,6 +32,10 @@ class Routes extends React.Component<Props> {
     {
       title: "Proxies",
       icon: "gold"
+    },
+    {
+      title: "Billing",
+      icon: "dollar"
     },
     {
       title: "Settings",
@@ -45,6 +50,10 @@ class Routes extends React.Component<Props> {
 
   closeWindow = () => {
     ipcRenderer.send("closeWindow");
+  };
+
+  miniWindow = () => {
+    ipcRenderer.send("miniWindow");
   };
 
   toggle = () => {
@@ -65,7 +74,7 @@ class Routes extends React.Component<Props> {
 
   render() {
     return (
-      <Layout theme="light">
+      <Layout>
         {this.props.navigation == "side" && (
           <Sider
             trigger={null}
@@ -110,7 +119,7 @@ class Routes extends React.Component<Props> {
           >
             {this.props.navigation == "noside" && (
               <div className={styles.headerlogo}>
-                <img style={{ height: "50px" }} src="logo.svg" />
+                <img style={{ height: "70px" }} src="logo.svg" />
               </div>
             )}
             {this.props.navigation == "side" && (
@@ -137,9 +146,18 @@ class Routes extends React.Component<Props> {
                 ))}
               </Menu>
             )}
-            <a onClick={this.closeWindow} className={styles.itemicon}>
-              <Icon type="poweroff" />
-            </a>
+            <span className={styles.windowiconspan}>
+              <Icon
+                type="minus"
+                onClick={this.miniWindow}
+                className={styles.windowicon}
+              />
+              <Icon
+                type="close"
+                onClick={this.closeWindow}
+                className={styles.windowicon}
+              />
+            </span>
           </Header>
           <Content
             style={{
@@ -156,6 +174,7 @@ class Routes extends React.Component<Props> {
                   component={AccountPage}
                 />
                 <Route path={routes.ProxyPage} component={ProxyPage} />
+                <Route path={routes.BillingPage} component={BillingPage} />
                 <Route path={routes.SettingPage} component={SettingsPage} />
               </Switch>
             </App>

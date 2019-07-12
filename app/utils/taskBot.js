@@ -12,8 +12,6 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 require("nightmare-wait-for-url");
 const Nightmare = require("nightmare");
 const needle = require("needle");
-//const tress = require("tress");
-const waitUntil = require("wait-until");
 let sender = null;
 
 let youtubes = [
@@ -198,15 +196,13 @@ const runTask = async task => {
     electronPath,
     waitTimeout: 3600000,
     gotoTimeout: 3600000,
-    alwaysOnTop: false,
-    openDevTools: true
+    alwaysOnTop: false
   });
 
   if (proxy) {
     nightmare = new Nightmare({
       show: true,
       electronPath,
-      openDevTools: true,
       waitTimeout: 3600000,
       gotoTimeout: 3600000,
       alwaysOnTop: false,
@@ -415,13 +411,12 @@ const pauseTask = async task => {
     // });
     sender.send("actionLog", { email: task.email, status: "Napping" });
     const nightmare = running_bots[index].nightmare;
-    await nightmare.goto("https://a.com/");
-
+    running_profiles -= 1;
     const id = setTimeout(() => addTask(task), randomMsSec(min_slp, max_slp));
     paused_bots.push(running_bots[index]);
     running_bots.timeId = id;
     running_bots.splice(index, 1);
-    running_profiles -= 1;
+    await nightmare.goto("https://a.com/");
   } catch (e) {}
 };
 
@@ -470,7 +465,7 @@ export const showTask = async task => {
     await running_bots[index].nightmare.show();
   } else {
     const index = paused_bots.findIndex(bot => bot.email === task.email);
-    await running_bots[index].nightmare.show();
+    if (index !== -1) await paused_bots[index].nightmare.show();
   }
 };
 
@@ -480,10 +475,8 @@ export const hideTask = async task => {
   if (index !== -1) {
     await running_bots[index].nightmare.hide();
   } else {
-    console.log(index);
-    if (index !== -1) {
-      await running_bots[index].nightmare.hide();
-    }
+    const index = paused_bots.findIndex(bot => bot.email === task.email);
+    if (index !== -1) await paused_bots[index].nightmare.hide();
   }
 };
 

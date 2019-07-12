@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Select, Icon, Modal, Input, Spin } from "antd";
-import EditableFormTable from "./AccountTable";
-import styles from "./Account.scss";
+import EditableFormTable from "./BillingTable";
+import styles from "./Billing.scss";
 
-const { Option } = Select;
+const { Search } = Input;
 const ButtonGroup = Button.Group;
 const TextArea = Input.TextArea;
 
@@ -184,62 +184,19 @@ export default class Account extends React.Component {
               <Icon type="rocket" />
               Import
             </Button>
+          </ButtonGroup>
+          <div className={styles.actionbuttons}>
+            <Search style={{ width: 250 }} placeholder="Search ..." />
             <Button
+              type="primary"
               onClick={this.ExportAccounts}
               disabled={this.props.editingKey !== -1}
+              className={styles.exportbutton}
             >
               <Icon type="download" />
               Export
             </Button>
-          </ButtonGroup>
-          <ButtonGroup className={styles.actionbuttons}>
-            <Button
-              type="primary"
-              disabled={this.props.editingKey !== -1}
-              onClick={this.enableAll}
-              className={styles.enablebutton}
-            >
-              <Icon type="check-square" />
-              Enable All
-            </Button>
-            <Button
-              disabled={this.props.editingKey !== -1}
-              onClick={this.disableAll}
-              className={styles.disablebutton}
-            >
-              <Icon type="stop" />
-              Disable All
-            </Button>
-            <Button
-              type="primary"
-              disabled={this.props.editingKey !== -1}
-              onClick={this.startAll}
-              className={styles.startbutton}
-            >
-              <Icon type="play-square" />
-              Start All
-            </Button>
-            <Button
-              disabled={this.props.editingKey !== -1}
-              onClick={this.stopAll}
-              className={styles.stopbutton}
-            >
-              <Icon type="square" />
-              Stop All
-            </Button>
-            <Select
-              defaultValue="All"
-              className={styles.combo}
-              disabled={this.props.editingKey !== -1}
-              onChange={this.setCurrentCategory}
-            >
-              {this.props.categories.map((category, index) => (
-                <Option key={index} value={category}>
-                  {category}
-                </Option>
-              ))}
-            </Select>
-          </ButtonGroup>
+          </div>
         </div>
         <div>
           <EditableFormTable
