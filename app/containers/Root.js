@@ -6,8 +6,9 @@ import type { Store } from "../reducers/types";
 import Routes from "../Routes";
 
 import { connect } from "react-redux";
-import { ACCOUNT } from "../reducers/types";
+import { ACCOUNT, PROXY } from "../reducers/types";
 
+const fs = require("fs");
 const ipcRenderer = require("electron").ipcRenderer;
 
 type Props = {
@@ -22,6 +23,8 @@ class Root extends Component<Props> {
     // socket.on("actionLog", data => {
     //   this.props.changeField(data.email, "actionlog", data.status);
     // });
+    const accPath = __dirname + "/__accs.json";
+    const prxPath = __dirname + "/__prxs.json";
     ipcRenderer.on("actionLog", (event, data) => {
       this.props.changeField(data.email, "actionlog", data.status);
       if (data.status === "Scheming") {
@@ -34,6 +37,39 @@ class Root extends Component<Props> {
     ipcRenderer.on("eye", (event, data) => {
       this.props.changeField(data.email, "actions-1", false);
     });
+    ipcRenderer.on("saveAccounts", () => {
+      const { accounts, proxies } = this.props;
+      fs.writeFileSync(accPath, JSON.stringify(accounts), err => {
+        if (err) {
+          alert("An error ocurred creating the file :" + err.message);
+          return;
+        }
+      });
+      fs.writeFileSync(prxPath, JSON.stringify(proxies), err => {
+        if (err) {
+          alert("An error ocurred creating the file :" + err.message);
+          return;
+        }
+      });
+    });
+
+    fs.readFile(accPath, "utf-8", (err, data) => {
+      if (err) {
+        console.log("An error ocurred reading the file :" + err.message);
+        return;
+      } else {
+        this.props.addAccounts(JSON.parse(data));
+      }
+    });
+
+    fs.readFile(prxPath, "utf-8", (err, data) => {
+      if (err) {
+        console.log("An error ocurred reading the file :" + err.message);
+        return;
+      } else {
+        this.props.addProxies(JSON.parse(data));
+      }
+    });
   }
   render() {
     const { store, history } = this.props;
@@ -45,6 +81,13 @@ class Root extends Component<Props> {
       </Provider>
     );
   }
+}
+
+function mapStateToProps(state) {
+  return {
+    accounts: state.accounts.accountList,
+    proxies: state.proxies.proxyList
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -63,11 +106,24 @@ function mapDispatchToProps(dispatch) {
         email,
         value
       });
+    },
+    addAccounts: accounts => {
+      dispatch({
+        type: ACCOUNT.CHECKVALID_END,
+        newAccounts: accounts
+      });
+    },
+    addProxies: proxies => {
+      dispatch({
+        type: PROXY.CHECKVALID_END,
+        newProxies: proxies,
+        adding: true
+      });
     }
   };
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Root);

@@ -127,6 +127,7 @@ export default class Proxy extends React.Component {
               type="primary"
               onClick={this.addRow}
               disabled={this.props.editingKey !== -1}
+              style={{ width: 100 }}
             >
               <Icon type="user-add" />
               New
@@ -134,6 +135,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.importProxies}
+              style={{ width: 100 }}
             >
               <Icon type="rocket" />
               Import
@@ -141,6 +143,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.exportProxies}
+              style={{ width: 100 }}
             >
               <Icon type="download" />
               Export

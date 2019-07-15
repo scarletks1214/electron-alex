@@ -77,7 +77,8 @@ function* checkValidRequest(action) {
         const newacc = {
           email: account.email,
           password: account.password,
-          proxy
+          proxy,
+          category: account.category || "None"
         };
         newAccounts.push(newacc);
 
@@ -96,7 +97,8 @@ function* checkValidRequest(action) {
         const newacc = {
           email: account.email,
           password: account.password,
-          proxy: "None"
+          proxy: "None",
+          category: account.category || "None"
         };
         newAccounts.push(newacc);
       }
@@ -112,7 +114,8 @@ function* checkValidRequest(action) {
       const newacc = {
         email: account.email,
         password: account.password,
-        proxy
+        proxy,
+        category: account.category || "None"
       };
       newAccounts.push(newacc);
     }

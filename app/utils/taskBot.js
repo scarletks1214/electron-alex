@@ -370,7 +370,6 @@ const startTask = task => {
     const bot = paused_bots[index];
     paused_bots.splice(index, 1);
     running_bots.push(bot);
-    bot.currentTarget += 1;
     const target = myTargets[bot.currentTarget];
     if (target.includes("https://www.youtube.com") && youtube) {
       bot.nightmare.goto(target);
@@ -462,21 +461,28 @@ export const stopTask = async task => {
 export const showTask = async task => {
   const index = running_bots.findIndex(bot => bot.email === task.email);
   if (index !== -1) {
+    console.log("showing running task ....", task.email);
     await running_bots[index].nightmare.show();
   } else {
     const index = paused_bots.findIndex(bot => bot.email === task.email);
-    if (index !== -1) await paused_bots[index].nightmare.show();
+    if (index !== -1) {
+      console.log("showing paused task ....", task.email);
+      await paused_bots[index].nightmare.show();
+    }
   }
 };
 
 export const hideTask = async task => {
-  console.log("hide task ....", task.email);
   const index = running_bots.findIndex(bot => bot.email === task.email);
   if (index !== -1) {
+    console.log("hiding running task ....", task.email);
     await running_bots[index].nightmare.hide();
   } else {
     const index = paused_bots.findIndex(bot => bot.email === task.email);
-    if (index !== -1) await paused_bots[index].nightmare.hide();
+    if (index !== -1) {
+      console.log("hiding paused task ....", task.email);
+      await paused_bots[index].nightmare.hide();
+    }
   }
 };
 

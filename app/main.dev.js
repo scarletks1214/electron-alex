@@ -150,6 +150,7 @@ ipcMain.on("changeSetting", async (event, data) => {
 });
 
 ipcMain.on("closeWindow", () => {
+  mainWindow.webContents.send("saveAccounts");
   app.quit();
 });
 

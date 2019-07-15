@@ -43,8 +43,11 @@ export const SETTINGS = createActionTypes("SETTINGS", [
   "SETTARGETS"
 ]);
 
+export const BILLING = createActionTypes("BILLINGS", []);
+
 export default {
   ACCOUNT,
   PROXY,
-  SETTINGS
+  SETTINGS,
+  BILLING
 };

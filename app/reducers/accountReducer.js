@@ -91,8 +91,8 @@ export default function accountReducer(state = initialState, action) {
             proxy: account.proxy,
             category: account.category ? account.category : "None",
             actionlog: "",
-            enabled: true,
-            oneclick: 0.0,
+            enabled: account.enabled ? account.enabled : true,
+            oneclick: account.oneclick ? account.oneclick : 0.0,
             actions: [true, true],
             edit: true
           };

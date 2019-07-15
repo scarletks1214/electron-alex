@@ -138,115 +138,27 @@ class EditableTable extends React.Component {
       editable: true
     },
     {
-      title: "Password",
+      title: "Card Info",
       align: "center",
-      dataIndex: "password",
-      key: "password",
+      dataIndex: "cardinfo",
+      key: "cardinfo",
       editable: true,
       render: (text, record) => (
         <InputPassword disabled style={{ width: "100px" }} value={text} />
       )
     },
     {
-      title: "Proxy",
+      title: "Billing Address",
       align: "center",
-      dataIndex: "proxy",
-      key: "proxy",
+      dataIndex: "address",
+      key: "address",
       editable: true
     },
     {
-      title: "Action Log",
+      title: "Email",
       align: "center",
-      dataIndex: "actionlog",
-      key: "actionlog"
-    },
-    {
-      title: "Enabled",
-      align: "center",
-      dataIndex: "enabled",
-      key: "enabled",
-      render: (enabled, record) => (
-        <Checkbox
-          disabled={this.props.editingKey !== record.key}
-          onChange={() =>
-            this.props.changeField(record.key, "enabled", !enabled)
-          }
-          checked={enabled}
-        />
-      )
-    },
-    {
-      title: "One Click",
-      align: "center",
-      dataIndex: "oneclick",
-      key: "oneclick",
-      render: (oneclick, record) => (
-        <Progress
-          type="circle"
-          percent={oneclick}
-          width={40}
-          format={() => {
-            if (oneclick < 100)
-              return <Icon type="close" style={{ color: "red" }} />;
-            return <Icon type="check" style={{ color: "green" }} />;
-          }}
-        />
-      )
-    },
-    {
-      title: "Actions",
-      align: "center",
-      dataIndex: "actions",
-      key: "actions",
-      render: (actions, record) => (
-        <div>
-          {(record.actionlog === "Marinating" ||
-            record.actionlog === "Logging in") && (
-            <ScaleLoader color="#1890ff" height={18} width={3} />
-          )}
-          <a
-            disabled={this.props.editingKey == record.key || !record.enabled}
-            onClick={() => {
-              this.props.changeField(record.key, "actions-0", !actions[0]);
-              if (!actions[0]) {
-                ipcRenderer.send("startTask", record);
-                record.oneclick = 0;
-                record.actions[1] = true;
-              } else {
-                ipcRenderer.send("stopTask", record);
-              }
-            }}
-          >
-            {actions[0] ? (
-              <Icon type="play-circle" className={styles.play} />
-            ) : (
-              <Icon type="pause-circle" className={styles.play} />
-            )}
-          </a>
-          <a
-            disabled={
-              this.props.editingKey == record.key ||
-              !record.enabled ||
-              record.actions[0] ||
-              record.actionlog === "Scheduling"
-            }
-            onClick={() => {
-              this.props.changeField(record.key, "actions-1", !actions[1]);
-              if (!actions[1]) {
-                ipcRenderer.send("hideTask", record);
-              } else {
-                ipcRenderer.send("showTask", record);
-              }
-            }}
-          >
-            {actions[1] ? (
-              <Icon type="eye" className={styles.eyeball} />
-            ) : (
-              <Icon type="eye-invisible" className={styles.eyeball} />
-            )}
-          </a>
-        </div>
-      )
+      dataIndex: "email",
+      key: "email"
     },
     {
       title: "",

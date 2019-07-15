@@ -173,6 +173,7 @@ export default class Account extends React.Component {
               type="primary"
               onClick={this.addRow}
               disabled={this.props.editingKey !== -1}
+              style={{ width: 100 }}
             >
               <Icon type="user-add" />
               New
@@ -180,6 +181,7 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.importAccounts}
+              style={{ width: 120 }}
             >
               <Icon type="rocket" />
               Import
