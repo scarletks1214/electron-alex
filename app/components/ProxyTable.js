@@ -138,6 +138,13 @@ class EditableTable extends React.Component {
       )
     },
     {
+      title: "Speed",
+      align: "center",
+      dataIndex: "speed",
+      key: "speed",
+      render: speed => (speed !== "bad" ? speed + "MS" : "")
+    },
+    {
       title: "",
       dataIndex: "edit",
       key: "edit",
@@ -213,6 +220,10 @@ class EditableTable extends React.Component {
   }
 
   updateWindowDimensions() {
+    const divisions = [4.5, 8, 6, 6, 10, 12];
+    for (let i = 0; i < 6; i += 1) {
+      this.columns[i].width = (window.innerWidth - 100) / divisions[i];
+    }
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 

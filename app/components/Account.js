@@ -156,6 +156,10 @@ export default class Account extends React.Component {
     });
   };
 
+  deleteAll = () => {
+    this.props.deleteAll();
+  };
+
   setCurrentCategory = value => {
     this.props.setCurrentCategory(value);
   };
@@ -224,8 +228,16 @@ export default class Account extends React.Component {
               onClick={this.stopAll}
               className={styles.stopbutton}
             >
-              <Icon type="square" />
+              <Icon type="pause-circle" />
               Stop All
+            </Button>
+            <Button
+              disabled={this.props.editingKey !== -1}
+              onClick={this.deleteAll}
+              className={styles.stopbutton}
+            >
+              <Icon type="delete" />
+              Delete All
             </Button>
             <Select
               defaultValue="All"

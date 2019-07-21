@@ -69,6 +69,8 @@ export default function accountReducer(state = initialState, action) {
         editingKey: -1,
         addingNow: -1
       };
+    case ACCOUNT.DELETEALL:
+      return { ...state, accountList: [], changed: !state.changed };
     case ACCOUNT.CHECKVALID_REQUEST:
       console.log("234234234");
       return {

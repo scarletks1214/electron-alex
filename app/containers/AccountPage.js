@@ -31,6 +31,9 @@ function mapDispatchToProps(dispatch) {
     deleteRow: key => {
       dispatch({ type: ACCOUNT.DELETEROW, key });
     },
+    deleteAll: () => {
+      dispatch({ type: ACCOUNT.DELETEALL });
+    },
     setEditingKey: editingKey => {
       dispatch({ type: ACCOUNT.SETEDITINGKEY, editingKey });
     },

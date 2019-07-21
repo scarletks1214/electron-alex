@@ -1,56 +1,25 @@
 // @flow
 import { connect } from "react-redux";
-import { ACCOUNT } from "../reducers/types";
+import { BILLING } from "../reducers/types";
 import Billing from "../components/Billing";
 
 function mapStateToProps(state) {
   return {
-    settings: state.settings,
-    accounts: state.accounts.accountList,
-    proxies: state.proxies.proxyList,
-    changed: state.accounts.changed,
-    editingKey: state.accounts.editingKey,
-    addedRows: state.accounts.addedRows,
-    confirmLoading: state.accounts.confirmLoading,
-    categories: state.accounts.categories,
-    currentCategory: state.accounts.currentCategory
+    billingAccounts: state.billingData.billingAccounts,
+    changed: state.billingData.changed
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeField: (key, field, value) => {
-      dispatch({ type: ACCOUNT.CHANGEFIELD, key, field, value });
+    addAccount: account => {
+      dispatch({ type: BILLING.ADDACCOUNT, account });
     },
-    changeRow: (key, row) => {
-      dispatch({ type: ACCOUNT.CHANGEROW, key, row });
+    deleteAccount: email => {
+      dispatch({ type: BILLING.DELETEACCOUNT, email });
     },
-    addRow: () => {
-      dispatch({ type: ACCOUNT.ADDROW });
-    },
-    deleteRow: key => {
-      dispatch({ type: ACCOUNT.DELETEROW, key });
-    },
-    setEditingKey: editingKey => {
-      dispatch({ type: ACCOUNT.SETEDITINGKEY, editingKey });
-    },
-    checkValidation: (accounts, proxies) => {
-      dispatch({ type: ACCOUNT.CHECKVALID_REQUEST, accounts, proxies });
-    },
-    changeAddedRows: () => {
-      dispatch({ type: ACCOUNT.CHANGEADDED });
-    },
-    cancelCheck: () => {
-      dispatch({ type: ACCOUNT.CANCEL_CHECK });
-    },
-    startTask: record => {
-      dispatch({ type: ACCOUNT.START_TASK, record });
-    },
-    stopTask: record => {
-      dispatch({ type: ACCOUNT.STOP_TASK, record });
-    },
-    setCurrentCategory: category => {
-      dispatch({ type: ACCOUNT.CHANGECATEGORY, category });
+    editAccount: (index, account) => {
+      dispatch({ type: BILLING.EDITACCOUNT, index, account });
     }
   };
 }

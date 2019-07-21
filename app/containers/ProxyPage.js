@@ -40,6 +40,9 @@ function mapDispatchToProps(dispatch) {
     },
     cancelCheck: () => {
       dispatch({ type: PROXY.CANCEL_CHECK });
+    },
+    deleteAll: badOnly => {
+      dispatch({ type: PROXY.DELETEALL, badOnly });
     }
   };
 }

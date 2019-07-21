@@ -55,11 +55,11 @@ class EditableCell extends React.Component {
   getInput = form => {
     switch (this.props.dataIndex) {
       case "category":
-        return <Input style={{ width: "100px" }} />;
+        return <Input style={{ width: "90px", marginRight: "0px" }} />;
       case "password":
-        return <InputPassword style={{ width: "100px" }} />;
+        return <InputPassword style={{ width: "130px", marginRight: "0px" }} />;
       case "email":
-        return <Input style={{ width: "100px" }} />;
+        return <Input style={{ width: "160px", marginRight: "0px" }} />;
       case "proxy":
         return (
           <ProxySelect
@@ -70,7 +70,7 @@ class EditableCell extends React.Component {
           />
         );
       default:
-        return <Input style={{ width: "100px" }} />;
+        return <Input style={{ width: "70px" }} />;
     }
   };
 
@@ -125,46 +125,45 @@ class EditableTable extends React.Component {
   columns = [
     {
       title: "Category",
-      align: "center",
       dataIndex: "category",
       key: "category",
       editable: true
     },
     {
       title: "Email",
-      align: "center",
       dataIndex: "email",
       key: "email",
       editable: true
     },
     {
       title: "Password",
-      align: "center",
       dataIndex: "password",
       key: "password",
       editable: true,
       render: (text, record) => (
-        <InputPassword disabled style={{ width: "100px" }} value={text} />
+        <InputPassword
+          disabled
+          style={{ width: "130px", marginRight: "0px" }}
+          value={text}
+        />
       )
     },
     {
       title: "Proxy",
-      align: "center",
       dataIndex: "proxy",
       key: "proxy",
       editable: true
     },
     {
       title: "Action Log",
-      align: "center",
       dataIndex: "actionlog",
       key: "actionlog"
     },
     {
       title: "Enabled",
-      align: "center",
       dataIndex: "enabled",
       key: "enabled",
+      align: "center",
       render: (enabled, record) => (
         <Checkbox
           disabled={this.props.editingKey !== record.key}
@@ -177,9 +176,9 @@ class EditableTable extends React.Component {
     },
     {
       title: "One Click",
-      align: "center",
       dataIndex: "oneclick",
       key: "oneclick",
+      align: "center",
       render: (oneclick, record) => (
         <Progress
           type="circle"
@@ -195,8 +194,8 @@ class EditableTable extends React.Component {
     },
     {
       title: "Actions",
-      align: "center",
       dataIndex: "actions",
+      align: "center",
       key: "actions",
       render: (actions, record) => (
         <div>
@@ -252,7 +251,6 @@ class EditableTable extends React.Component {
       title: "",
       dataIndex: "edit",
       key: "edit",
-      align: "center",
       render: (value, record) => (
         <div>
           {this.isEditing(record) ? (
@@ -341,6 +339,10 @@ class EditableTable extends React.Component {
   }
 
   updateWindowDimensions() {
+    const divisions = [9, 6, 7, 6, 9, 14, 10, 12];
+    for (let i = 0; i < 8; i += 1) {
+      this.columns[i].width = (window.innerWidth - 150) / divisions[i];
+    }
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
@@ -379,6 +381,7 @@ class EditableTable extends React.Component {
             rowClassName="editable-row"
             pagination={false}
             scroll={{ y: this.state.height - 250 }}
+            rowKey="email"
           />
         </EditableContext.Provider>
       </div>

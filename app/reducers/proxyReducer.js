@@ -49,7 +49,8 @@ export default function proxyReducer(state = initialState, action) {
               username: proxy.username || "",
               password: proxy.password || "",
               validation: [true, true],
-              edit: true
+              edit: true,
+              speed: proxy.speed
             };
             data.unshift(row);
           }
@@ -65,7 +66,8 @@ export default function proxyReducer(state = initialState, action) {
       index = data.findIndex(item => item.key === key);
       if (data[index].validation[0] || index == -1) return state;
       data[index].validation[0] = true;
-      data[index].validation[1] = action.valid;
+      data[index].validation[1] = action.valid !== "bad";
+      data[index].speed = action.valid;
       return { ...state, proxyList: data, changed: !state.changed };
     case PROXY.CANCEL_CHECK:
       return { ...state, confirmLoading: false };
@@ -80,6 +82,16 @@ export default function proxyReducer(state = initialState, action) {
         changed: !state.changed,
         editingKey: -1
       };
+    case PROXY.DELETEALL:
+      if (action.badOnly) {
+        return {
+          ...state,
+          proxyList: data.filter(prx => prx.validation[1] === true),
+          changed: !state.changed
+        };
+      } else {
+        return { ...state, proxyList: [], changed: !state.changed };
+      }
     default:
       return state;
   }

@@ -56,6 +56,21 @@ export default class Proxy extends React.Component {
     this.setState({ addingNow: true });
   };
 
+  testAll = () => {
+    this.props.proxies.forEach(prx => {
+      this.props.changeField(prx.key, "validation-0", !prx.validation[0]);
+    });
+    this.props.checkValidation(this.props.proxies, false);
+  };
+
+  deleteAll = () => {
+    this.props.deleteAll();
+  };
+
+  deleteBad = () => {
+    this.props.deleteAll(true);
+  };
+
   importProxies = () => {
     const options = {
       filters: [
@@ -96,10 +111,12 @@ export default class Proxy extends React.Component {
         }
       ]
     };
-    const data = this.props.proxies.map(prx => {
-      const { ipaddr, port, username, password } = prx;
-      return { ipaddr, port, username, password };
-    });
+    const data = this.props.proxies
+      .filter(prx => prx.validation[1] === true)
+      .map(prx => {
+        const { ipaddr, port, username, password } = prx;
+        return { ipaddr, port, username, password };
+      });
     dialog.showSaveDialog(options, filePath => {
       if (filePath === undefined) {
         console.log("You didn't save the file");
@@ -127,7 +144,6 @@ export default class Proxy extends React.Component {
               type="primary"
               onClick={this.addRow}
               disabled={this.props.editingKey !== -1}
-              style={{ width: 100 }}
             >
               <Icon type="user-add" />
               New
@@ -135,7 +151,6 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.importProxies}
-              style={{ width: 100 }}
             >
               <Icon type="rocket" />
               Import
@@ -143,10 +158,36 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.exportProxies}
-              style={{ width: 100 }}
             >
               <Icon type="download" />
-              Export
+              Export Tested
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup className={styles.actionbuttons}>
+            <Button
+              type="primary"
+              disabled={this.props.editingKey !== -1}
+              onClick={this.testAll}
+              className={styles.startbutton}
+            >
+              <Icon type="play-square" />
+              Test All
+            </Button>
+            <Button
+              disabled={this.props.editingKey !== -1}
+              onClick={this.deleteAll}
+              className={styles.deletebutton}
+            >
+              <Icon type="delete" />
+              Delete All
+            </Button>
+            <Button
+              disabled={this.props.editingKey !== -1}
+              onClick={this.deleteBad}
+              className={styles.deletebutton}
+            >
+              <Icon type="delete" />
+              Delete Bad
             </Button>
           </ButtonGroup>
         </div>

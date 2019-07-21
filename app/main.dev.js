@@ -14,6 +14,8 @@ import { app, BrowserWindow, session, ipcMain, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import * as taskBot from "./utils/taskBot";
+import profile_converter from "./utils/profile-conveter";
+import fs from "fs";
 
 export default class AppUpdater {
   constructor() {
@@ -156,4 +158,11 @@ ipcMain.on("closeWindow", () => {
 
 ipcMain.on("miniWindow", () => {
   mainWindow.minimize();
+});
+
+ipcMain.on("convertProfile", (event, data) => {
+  const { src_path, dst_path, src_format, dst_format } = data;
+  console.log(src_path, dst_path, src_format, dst_format);
+  profile_converter(src_path, dst_path, src_format, dst_format);
+  event.returnValue = "converted";
 });

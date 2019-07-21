@@ -12,6 +12,7 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 require("nightmare-wait-for-url");
 const Nightmare = require("nightmare");
 const needle = require("needle");
+const request = require("request");
 let sender = null;
 
 let youtubes = [
@@ -133,11 +134,9 @@ let gsearch = true;
 let youtube = true;
 let youtube_duration_min = 3;
 let youtube_duration_max = 4;
-let gsearch_duration_min = 0.05;
-let gsearch_duration_max = 0.8;
+let gsearch_duration_min = 0.01;
+let gsearch_duration_max = 0.1;
 let total_loop = 1;
-let scroll_down_min = 0;
-let scroll_down_max = 300;
 
 Nightmare.action(
   "show",
@@ -309,7 +308,7 @@ const runTask = async task => {
         await waitForReady();
 
         try {
-          if (target.includes("https://www.youtube.com") && youtube) {
+          if (target.includes("youtube.com") && youtube) {
             console.log(
               "youtube video watching ....",
               target,
@@ -370,8 +369,11 @@ const startTask = task => {
     const bot = paused_bots[index];
     paused_bots.splice(index, 1);
     running_bots.push(bot);
-    const target = myTargets[bot.currentTarget];
-    if (target.includes("https://www.youtube.com") && youtube) {
+    let target = myTargets[bot.currentTarget];
+    while (!target) {
+      target = myTargets[--bot.currentTarget];
+    }
+    if (target.includes("youtube.com") && youtube) {
       bot.nightmare.goto(target);
     } else if (gsearch) {
       bot.nightmare.goto("https://www.google.com/");
@@ -510,25 +512,25 @@ const setSettings = (duration, maxProfile, gs, yt) => {
 
 app.post("/checkproxy", (req, res) => {
   console.log("proxy", req.body.myProxy, req.body.username, req.body.password);
-  let proxy = req.body.myProxy;
+  let proxy = "http://" + req.body.myProxy;
   if (req.body.username)
-    proxy = `${req.body.username}:${req.body.password}@${req.body.myProxy}`;
+    proxy = `http://${req.body.username}:${req.body.password}@${
+      req.body.myProxy
+    }`;
 
-  needle.get(
+  request.get(
     "https://www.google.com",
     {
       proxy,
-      read_timeout: 5000,
-      open_timeout: 5000,
-      response_timeout: 5000
+      timeout: 5000,
+      time: true
     },
-    err => {
+    (err, resp) => {
       if (err) {
         console.log("false", err);
-        res.send(false);
+        res.send("bad");
       } else {
-        console.log("true");
-        res.send(true);
+        res.send(resp.elapsedTime + "");
       }
     }
   );

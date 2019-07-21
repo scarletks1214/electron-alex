@@ -1,188 +1,138 @@
 import React from "react";
 import { Button, Select, Icon, Modal, Input, Spin } from "antd";
-import EditableFormTable from "./BillingTable";
+import BillingTable from "./BillingTable";
 import styles from "./Billing.scss";
+import BillingModal from "./BillingModal";
+import ImportBillingModal from "./ImportBilling";
+import ExportBillingModal from "./ExportBilling";
+import { ipcRenderer } from "electron";
 
 const { Search } = Input;
 const ButtonGroup = Button.Group;
-const TextArea = Input.TextArea;
 
-const remote = require("electron").remote;
-const dialog = remote.dialog;
 const fs = require("fs");
-const ipcRenderer = require("electron").ipcRenderer;
 
 export default class Account extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      addingNow: false,
-      newAccounts: []
+      formVisible: false,
+      editingRow: -1,
+      importVisible: false,
+      exportVisible: false
     };
   }
 
-  componentWillReceiveProps(props) {
-    if (props.addedRows && !props.confirmLoading) {
-      this.setState({ addingNow: false, newAccounts: "" });
-      this.props.changeAddedRows();
-    }
-  }
+  componentWillReceiveProps(props) {}
 
-  addRows = () => {
-    let newaccs = this.state.newAccounts.split("\n");
-    let newrows = [];
-    newaccs.forEach(acc => {
-      const sp_prx = acc.split(":");
-      if (
-        sp_prx[0] &&
-        sp_prx[1] &&
-        sp_prx[0]
-          .toLowerCase()
-          .match(
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          ) &&
-        this.props.accounts.findIndex(item => item.email == sp_prx[0]) == -1
-      ) {
-        newrows.push({
-          email: sp_prx[0],
-          password: sp_prx[1],
-          ipaddr: sp_prx[2],
-          port: sp_prx[3],
-          username: sp_prx[4],
-          prx_password: sp_prx[5]
-        });
+  importAccounts = () => {
+    this.setState({ importVisible: true });
+  };
+
+  exportAccounts = () => {
+    this.setState({ exportVisible: true });
+  };
+
+  cancelForm = () => {
+    const { form } = this.formRef.props;
+    form.resetFields();
+    this.setFormVisible(false);
+  };
+
+  saveForm = () => {
+    const { editingRow } = this.state;
+    const { form } = this.formRef.props;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
       }
+
+      console.log("Received values of form: ", values);
+      if (editingRow === -1) {
+        this.props.addAccount(values);
+      } else {
+        this.props.editAccount(editingRow, values);
+      }
+      form.resetFields();
+      this.setFormVisible(false);
     });
-    console.log(newrows);
-    this.props.checkValidation(newrows, this.props.proxies);
   };
 
   addImportedAccounts = accounts => {
-    this.props.checkValidation(JSON.parse(accounts), this.props.proxies);
+    accounts.forEach(acc => this.props.addAccount(acc));
+    this.setState({ importVisible: false });
   };
 
-  setAddingNow = addingNow => {
-    this.setState({ addingNow });
+  addAccount = () => {
+    this.setState({ formVisible: true, editingRow: -1 });
   };
 
-  addRow = () => {
-    this.setState({ addingNow: true });
+  setFormVisible = visible => {
+    this.setState({ formVisible: visible });
   };
 
-  importAccounts = () => {
-    const options = {
-      filters: [
-        {
-          name: "All",
-          extensions: ["json", "csv"]
-        }
-      ]
-    };
-    dialog.showOpenDialog(options, filePath => {
-      console.log(filePath);
-      if (filePath === undefined) {
-        console.log("No file selected");
-        return;
-      }
-
-      fs.readFile(filePath[0], "utf-8", (err, data) => {
-        if (err) {
-          alert("An error ocurred reading the file :" + err.message);
-          return;
-        }
-
-        this.addImportedAccounts(data);
-      });
-    });
+  editAccount = email => {
+    const { billingAccounts } = this.props;
+    const index = billingAccounts.findIndex(acc => acc.BillingEmail === email);
+    console.log(email, index);
+    this.setState({ formVisible: true, editingRow: index });
   };
 
-  ExportAccounts = () => {
-    const options = {
-      filters: [
-        {
-          name: "All",
-          extensions: ["json", "csv"]
-        }
-      ]
-    };
-    const data = this.props.accounts.map(acc => {
-      const { category, email, password, proxy } = acc;
-      return { category, email, password, proxy };
-    });
-    dialog.showSaveDialog(options, filePath => {
-      if (filePath === undefined) {
-        console.log("You didn't save the file");
-        return;
-      }
+  cancelImportModal = () => {
+    this.setState({ importVisible: false });
+  };
 
-      fs.writeFileSync(filePath, JSON.stringify(data), err => {
+  cancelExportModal = () => {
+    this.setState({ exportVisible: false });
+  };
+
+  exportAccountsByFileType = (filePath, format) => {
+    const index = filePath.lastIndexOf("/");
+    const tPath = filePath.slice(0, index);
+    let name = filePath.slice(index + 1, filePath.length);
+    name = "__" + name;
+    fs.writeFileSync(
+      tPath + "/" + name,
+      JSON.stringify(this.props.billingAccounts),
+      err => {
         if (err) {
           alert("An error ocurred creating the file :" + err.message);
           return;
         }
+      }
+    );
+
+    try {
+      ipcRenderer.sendSync("convertProfile", {
+        src_path: tPath + "/" + name,
+        dst_path: filePath,
+        src_format: "defJSON",
+        dst_format: format
       });
-    });
-  };
-
-  enableAll = () => {
-    this.props.accounts.forEach(acc => {
-      this.props.changeField(acc.key, "enabled", true);
-    });
-  };
-
-  disableAll = () => {
-    this.props.accounts.forEach(acc => {
-      if (acc.actions[0]) this.props.changeField(acc.key, "enabled", false);
-    });
-  };
-
-  startAll = () => {
-    this.props.accounts.forEach(acc => {
-      if (acc.enabled && acc.actions[0]) {
-        this.props.changeField(acc.key, "actions-0", false);
-        ipcRenderer.send("startTask", acc);
-        acc.oneclick = 0;
-        acc.actions[1] = true;
-      }
-    });
-  };
-
-  stopAll = () => {
-    this.props.accounts.forEach(acc => {
-      if (acc.enabled) {
-        this.props.changeField(acc.key, "actions-0", true);
-        ipcRenderer.send("stopTask", acc);
-      }
-    });
-  };
-
-  setCurrentCategory = value => {
-    this.props.setCurrentCategory(value);
+      fs.unlink(tPath + "/" + name, () => {});
+    } catch (e) {
+      console.log("eror", e);
+    }
+    this.setState({ exportVisible: false });
   };
 
   render() {
-    console.log("confirmloading", this.props.confirmLoading);
+    const {
+      formVisible,
+      editingRow,
+      importVisible,
+      exportVisible
+    } = this.state;
+    const { billingAccounts, deleteAccount } = this.props;
     return (
-      <Spin
-        spinning={this.props.confirmLoading && !this.state.addingNow}
-        tip="Checking Proxy Validation ...."
-      >
+      <div>
         <div className={styles.controlbuttonarea}>
           <ButtonGroup>
-            <Button
-              type="primary"
-              onClick={this.addRow}
-              disabled={this.props.editingKey !== -1}
-              style={{ width: 100 }}
-            >
+            <Button type="primary" onClick={() => this.addAccount()}>
               <Icon type="user-add" />
               New
             </Button>
-            <Button
-              disabled={this.props.editingKey !== -1}
-              onClick={this.importAccounts}
-              style={{ width: 120 }}
-            >
+            <Button onClick={this.importAccounts} style={{ width: 120 }}>
               <Icon type="rocket" />
               Import
             </Button>
@@ -191,8 +141,7 @@ export default class Account extends React.Component {
             <Search style={{ width: 250 }} placeholder="Search ..." />
             <Button
               type="primary"
-              onClick={this.ExportAccounts}
-              disabled={this.props.editingKey !== -1}
+              onClick={this.exportAccounts}
               className={styles.exportbutton}
             >
               <Icon type="download" />
@@ -201,63 +150,30 @@ export default class Account extends React.Component {
           </div>
         </div>
         <div>
-          <EditableFormTable
-            data={
-              this.props.currentCategory === "All"
-                ? this.props.accounts
-                : this.props.accounts.filter(
-                    acc => acc.category === this.props.currentCategory
-                  )
-            }
-            changeField={this.props.changeField}
-            changeRow={this.props.changeRow}
-            deleteRow={this.props.deleteRow}
-            editingKey={this.props.editingKey}
-            setEditingKey={this.props.setEditingKey}
-            addingNow={this.state.addingNow}
-            setAddingNow={this.setAddingNow}
-            proxies={this.props.proxies}
-            startTask={this.props.startTask}
-            stopTask={this.props.stopTask}
+          <BillingTable
+            data={billingAccounts}
+            deleteRow={deleteAccount}
+            editRow={this.editAccount}
           />
         </div>
-        <Modal
-          title="Add New Accounts ..."
-          visible={this.state.addingNow}
-          onOk={this.addRows}
-          onCancel={() => this.setAddingNow(false)}
-          confirmLoading={this.props.confirmLoading}
-          maskClosable={false}
-          footer={[
-            <Button
-              key="back"
-              onClick={() => {
-                this.setAddingNow(false);
-                this.props.cancelCheck();
-              }}
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={this.props.confirmLoading}
-              onClick={this.addRows}
-            >
-              {this.props.confirmLoading
-                ? "Checking Proxy Validation ..."
-                : "Save"}
-            </Button>
-          ]}
-        >
-          <TextArea
-            onChange={e => this.setState({ newAccounts: e.target.value })}
-            style={{ height: "300px" }}
-            placeholder="Email:Password(:IP:Port(:Username:Password))"
-            value={this.state.newAccounts}
-          />
-        </Modal>
-      </Spin>
+        <BillingModal
+          wrappedComponentRef={ref => (this.formRef = ref)}
+          formVisible={formVisible}
+          onCancel={this.cancelForm}
+          onSave={this.saveForm}
+          data={editingRow >= 0 ? billingAccounts[editingRow] : null}
+        />
+        <ImportBillingModal
+          importVisible={importVisible}
+          addImportedAccounts={this.addImportedAccounts}
+          onCancel={this.cancelImportModal}
+        />
+        <ExportBillingModal
+          exportVisible={exportVisible}
+          onCancel={this.cancelExportModal}
+          exportAccounts={this.exportAccountsByFileType}
+        />
+      </div>
     );
   }
 }

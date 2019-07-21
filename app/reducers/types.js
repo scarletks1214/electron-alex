@@ -18,7 +18,8 @@ export const ACCOUNT = createActionTypes("ACCOUNT", [
   "START_TASK",
   "STOP_TASK",
   "CHANGECATEGORY",
-  "CHANGEONECLICK"
+  "CHANGEONECLICK",
+  "DELETEALL"
 ]);
 
 export const PROXY = createActionTypes("PROXY", [
@@ -30,7 +31,8 @@ export const PROXY = createActionTypes("PROXY", [
   "CHECKVALID_REQUEST",
   "CHECKVALID_END",
   "CHANGEADDED",
-  "CANCEL_CHECK"
+  "CANCEL_CHECK",
+  "DELETEALL"
 ]);
 
 export const SETTINGS = createActionTypes("SETTINGS", [
@@ -43,7 +45,11 @@ export const SETTINGS = createActionTypes("SETTINGS", [
   "SETTARGETS"
 ]);
 
-export const BILLING = createActionTypes("BILLINGS", []);
+export const BILLING = createActionTypes("BILLINGS", [
+  "ADDACCOUNT",
+  "DELETEACCOUNT",
+  "EDITACCOUNT"
+]);
 
 export default {
   ACCOUNT,
