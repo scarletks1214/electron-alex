@@ -24,7 +24,6 @@
     "postinstall": "yarn flow-typed && electron-builder install-app-deps package.json && yarn build-dll && opencollective-postinstall",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
-    "precommit": "lint-staged",
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
@@ -86,10 +85,18 @@
       ]
     },
     "win": {
-      "target": ["nsis", "msi"]
+      "target": [
+        "nsis",
+        "msi"
+      ]
     },
     "linux": {
-      "target": ["deb", "rpm", "snap", "AppImage"],
+      "target": [
+        "deb",
+        "rpm",
+        "snap",
+        "AppImage"
+      ],
       "category": "Development"
     },
     "directories": {
@@ -104,7 +111,9 @@
     "createDesktopShortcut": true
   },
   "license": "MIT",
-  "keywords": ["sproot"],
+  "keywords": [
+    "sproot"
+  ],
   "homepage": "https://github.com",
   "jest": {
     "testURL": "http://localhost/",
@@ -112,11 +121,17 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
       "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     },
-    "moduleFileExtensions": ["js", "jsx", "json"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },
-    "setupFiles": ["./internals/scripts/CheckBuiltsExist.js"]
+    "setupFiles": [
+      "./internals/scripts/CheckBuiltsExist.js"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -226,8 +241,10 @@
     "electron-log": "^2.2.17",
     "electron-updater": "^3.2.3",
     "encodeurl": "^1.0.2",
+    "fast-csv": "^3.1.0",
     "find-process": "^1.4.1",
     "history": "^4.7.2",
+    "json2csv": "^4.5.2",
     "less-loader": "^4.1.0",
     "nightmare": "^3.0.2",
     "nightmare-wait-for-url": "^1.0.0",
@@ -244,9 +261,11 @@
     "redux-thunk": "^2.3.0",
     "selenium-webdriver": "^4.0.0-alpha.3",
     "sequelize": "^5.3.2",
+    "shortid": "^2.2.14",
     "socket.io-client": "^2.2.0",
     "source-map-support": "^0.5.9",
     "sqlite3": "^4.0.6",
+    "unzip": "^0.1.11",
     "wait-until": "^0.0.2"
   },
   "devEngines": {

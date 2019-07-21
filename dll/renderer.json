@@ -37,11 +37,13 @@
       "id": "encodeurl",
       "buildMeta": { "providedExports": true }
     },
+    "fast-csv": { "id": "fast-csv", "buildMeta": { "providedExports": true } },
     "find-process": {
       "id": "find-process",
       "buildMeta": { "providedExports": true }
     },
     "history": { "id": "history", "buildMeta": { "providedExports": true } },
+    "json2csv": { "id": "json2csv", "buildMeta": { "providedExports": true } },
     "less-loader": {
       "id": "less-loader",
       "buildMeta": { "providedExports": true }
@@ -97,6 +99,7 @@
       "id": "sequelize",
       "buildMeta": { "providedExports": true }
     },
+    "shortid": { "id": "shortid", "buildMeta": { "providedExports": true } },
     "socket.io-client": {
       "id": "socket.io-client",
       "buildMeta": { "providedExports": true }
@@ -106,6 +109,7 @@
       "buildMeta": { "providedExports": true }
     },
     "sqlite3": { "id": "sqlite3", "buildMeta": { "providedExports": true } },
+    "unzip": { "id": "unzip", "buildMeta": { "providedExports": true } },
     "wait-until": {
       "id": "wait-until",
       "buildMeta": { "providedExports": true }

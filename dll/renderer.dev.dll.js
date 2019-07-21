@@ -243,6 +243,18 @@ eval("module.exports = encodeurl;\n\n//# sourceURL=webpack://renderer/external_%
 
 /***/ }),
 
+/***/ "fast-csv":
+/*!***************************!*\
+  !*** external "fast-csv" ***!
+  \***************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = fast-csv;\n\n//# sourceURL=webpack://renderer/external_%22fast-csv%22?");
+
+/***/ }),
+
 /***/ "find-process":
 /*!*******************************!*\
   !*** external "find-process" ***!
@@ -264,6 +276,18 @@ eval("module.exports = find-process;\n\n//# sourceURL=webpack://renderer/externa
 /***/ (function(module, exports) {
 
 eval("module.exports = history;\n\n//# sourceURL=webpack://renderer/external_%22history%22?");
+
+/***/ }),
+
+/***/ "json2csv":
+/*!***************************!*\
+  !*** external "json2csv" ***!
+  \***************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = json2csv;\n\n//# sourceURL=webpack://renderer/external_%22json2csv%22?");
 
 /***/ }),
 
@@ -459,6 +483,18 @@ eval("module.exports = sequelize;\n\n//# sourceURL=webpack://renderer/external_%
 
 /***/ }),
 
+/***/ "shortid":
+/*!**************************!*\
+  !*** external "shortid" ***!
+  \**************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = shortid;\n\n//# sourceURL=webpack://renderer/external_%22shortid%22?");
+
+/***/ }),
+
 /***/ "socket.io-client":
 /*!***********************************!*\
   !*** external "socket.io-client" ***!
@@ -492,6 +528,18 @@ eval("module.exports = source-map-support;\n\n//# sourceURL=webpack://renderer/e
 /***/ (function(module, exports) {
 
 eval("module.exports = sqlite3;\n\n//# sourceURL=webpack://renderer/external_%22sqlite3%22?");
+
+/***/ }),
+
+/***/ "unzip":
+/*!************************!*\
+  !*** external "unzip" ***!
+  \************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = unzip;\n\n//# sourceURL=webpack://renderer/external_%22unzip%22?");
 
 /***/ }),
 

@@ -38,15 +38,19 @@ class ImportBillingModal extends React.Component {
         dst_format: "defJSON"
       });
 
-      fs.readFile(tPath + "/" + name, "utf-8", (err, data) => {
-        if (err) {
-          alert("An error ocurred reading the file :" + err.message);
-          return;
-        }
+      setTimeout(
+        () =>
+          fs.readFile(tPath + "/" + name, "utf-8", (err, data) => {
+            if (err) {
+              alert("An error ocurred reading the file :" + err.message);
+              return;
+            }
 
-        this.props.addImportedAccounts(JSON.parse(data));
-        fs.unlink(tPath + "/" + name, () => {});
-      });
+            this.props.addImportedAccounts(JSON.parse(data));
+            fs.unlink(tPath + "/" + name, () => {});
+          }),
+        500
+      );
     });
   };
   render() {
