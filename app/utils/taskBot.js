@@ -11,7 +11,6 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 
 require("nightmare-wait-for-url");
 const Nightmare = require("nightmare");
-const needle = require("needle");
 const request = require("request");
 let sender = null;
 
@@ -125,10 +124,10 @@ const running_bots = [];
 const scheduled_bots = [];
 const paused_bots = [];
 
-let min_slp = 2;
-let max_slp = 3;
-let min_run = 0.5;
-let max_run = 1;
+let min_slp = 10;
+let max_slp = 20;
+let min_run = 45;
+let max_run = 60;
 let max_profiles = 1;
 let gsearch = true;
 let youtube = true;

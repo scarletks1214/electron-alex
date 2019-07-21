@@ -6,12 +6,12 @@ const initialState = {
   navigation: "noside",
   duration: {
     run: {
-      min: 15,
-      max: 25
+      min: 45,
+      max: 60
     },
     sleep: {
-      min: 30,
-      max: 60
+      min: 10,
+      max: 20
     }
   },
   maxProfile: 1,
