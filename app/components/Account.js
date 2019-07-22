@@ -241,7 +241,7 @@ export default class Account extends React.Component {
             </Button>
             <Select
               defaultValue="All"
-              className={styles.combo}
+              style={{ width: "150px" }}
               disabled={this.props.editingKey !== -1}
               onChange={this.setCurrentCategory}
             >

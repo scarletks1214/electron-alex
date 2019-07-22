@@ -55,11 +55,11 @@ class EditableCell extends React.Component {
   getInput = form => {
     switch (this.props.dataIndex) {
       case "category":
-        return <Input style={{ width: "90px", marginRight: "0px" }} />;
+        return <Input style={{ width: "70px" }} />;
       case "password":
-        return <InputPassword style={{ width: "130px", marginRight: "0px" }} />;
+        return <InputPassword style={{ width: "110px" }} />;
       case "email":
-        return <Input style={{ width: "160px", marginRight: "0px" }} />;
+        return <Input style={{ width: "180px" }} />;
       case "proxy":
         return (
           <ProxySelect
@@ -127,6 +127,7 @@ class EditableTable extends React.Component {
       title: "Category",
       dataIndex: "category",
       key: "category",
+      align: "center",
       editable: true
     },
     {
@@ -143,7 +144,7 @@ class EditableTable extends React.Component {
       render: (text, record) => (
         <InputPassword
           disabled
-          style={{ width: "130px", marginRight: "0px" }}
+          style={{ width: "100px", marginRight: "0px" }}
           value={text}
         />
       )
@@ -195,8 +196,8 @@ class EditableTable extends React.Component {
     {
       title: "Actions",
       dataIndex: "actions",
-      align: "center",
       key: "actions",
+      align: "center",
       render: (actions, record) => (
         <div>
           {(record.actionlog === "Marinating" ||
@@ -339,7 +340,7 @@ class EditableTable extends React.Component {
   }
 
   updateWindowDimensions() {
-    const divisions = [9, 6, 7, 6, 9, 14, 10, 12];
+    const divisions = [14, 6, 10, 2.7, 14, 15, 15, 15];
     for (let i = 0; i < 8; i += 1) {
       this.columns[i].width = (window.innerWidth - 150) / divisions[i];
     }
