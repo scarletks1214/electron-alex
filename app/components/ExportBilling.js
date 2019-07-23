@@ -70,8 +70,8 @@ class ExportBillingModal extends React.Component {
           }}
         >
           {billingFileFormats.map((format, index) => (
-            <Option value={format} key={index}>
-              {format}
+            <Option value={format.format} key={index}>
+              {format.name}
             </Option>
           ))}
         </Select>

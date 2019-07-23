@@ -291,6 +291,18 @@ eval("module.exports = json2csv;\n\n//# sourceURL=webpack://renderer/external_%2
 
 /***/ }),
 
+/***/ "keytar":
+/*!*************************!*\
+  !*** external "keytar" ***!
+  \*************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = keytar;\n\n//# sourceURL=webpack://renderer/external_%22keytar%22?");
+
+/***/ }),
+
 /***/ "less-loader":
 /*!******************************!*\
   !*** external "less-loader" ***!
@@ -300,6 +312,18 @@ eval("module.exports = json2csv;\n\n//# sourceURL=webpack://renderer/external_%2
 /***/ (function(module, exports) {
 
 eval("module.exports = less-loader;\n\n//# sourceURL=webpack://renderer/external_%22less-loader%22?");
+
+/***/ }),
+
+/***/ "macaddress":
+/*!*****************************!*\
+  !*** external "macaddress" ***!
+  \*****************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = macaddress;\n\n//# sourceURL=webpack://renderer/external_%22macaddress%22?");
 
 /***/ }),
 
@@ -324,6 +348,18 @@ eval("module.exports = nightmare;\n\n//# sourceURL=webpack://renderer/external_%
 /***/ (function(module, exports) {
 
 eval("module.exports = nightmare-wait-for-url;\n\n//# sourceURL=webpack://renderer/external_%22nightmare-wait-for-url%22?");
+
+/***/ }),
+
+/***/ "open":
+/*!***********************!*\
+  !*** external "open" ***!
+  \***********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = open;\n\n//# sourceURL=webpack://renderer/external_%22open%22?");
 
 /***/ }),
 

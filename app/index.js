@@ -1,17 +1,18 @@
 import React from "react";
 import { render } from "react-dom";
 import { AppContainer } from "react-hot-loader";
+import AuthContainer from "./containers/AuthContainer";
 import Root from "./containers/Root";
 import { configureStore, history } from "./store/configureStore";
 import "./app.global.scss";
-import "!style-loader!css-loader!antd/dist/antd.css";
+//import "!style-loader!css-loader!antd/dist/antd.css";
 
 const store = configureStore();
 
 render(
-  <AppContainer>
+  <AuthContainer>
     <Root store={store} history={history} />
-  </AppContainer>,
+  </AuthContainer>,
   document.getElementById("root")
 );
 
@@ -20,9 +21,9 @@ if (module.hot) {
     // eslint-disable-next-line global-require
     const NextRoot = require("./containers/Root").default;
     render(
-      <AppContainer>
+      <AuthContainer>
         <NextRoot store={store} history={history} />
-      </AppContainer>,
+      </AuthContainer>,
       document.getElementById("root")
     );
   });

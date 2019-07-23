@@ -7,25 +7,25 @@
  * https://webpack.js.org/concepts/hot-module-replacement/
  */
 
-import path from 'path';
-import fs from 'fs';
-import webpack from 'webpack';
-import chalk from 'chalk';
-import merge from 'webpack-merge';
-import { spawn, execSync } from 'child_process';
-import AntdScssThemePlugin from 'antd-scss-theme-plugin';
+import path from "path";
+import fs from "fs";
+import webpack from "webpack";
+import chalk from "chalk";
+import merge from "webpack-merge";
+import { spawn, execSync } from "child_process";
+import AntdScssThemePlugin from "antd-scss-theme-plugin";
 
-import baseConfig from './webpack.config.base';
-import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
+import baseConfig from "./webpack.config.base";
+import CheckNodeEnv from "../internals/scripts/CheckNodeEnv";
 
-CheckNodeEnv('development');
+CheckNodeEnv("development");
 
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
-const dll = path.join(__dirname, '..', 'dll');
-const manifest = path.resolve(dll, 'renderer.json');
+const dll = path.join(__dirname, "..", "dll");
+const manifest = path.resolve(dll, "renderer.json");
 const requiredByDLLConfig = module.parent.filename.includes(
-  'webpack.config.renderer.dev.dll'
+  "webpack.config.renderer.dev.dll"
 );
 
 /**
@@ -37,26 +37,26 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
       'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
     )
   );
-  execSync('yarn build-dll');
+  execSync("yarn build-dll");
 }
 
 export default merge.smart(baseConfig, {
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
 
-  mode: 'development',
+  mode: "development",
 
-  target: 'electron-renderer',
+  target: "electron-renderer",
 
   entry: [
-    'react-hot-loader/patch',
+    "react-hot-loader/patch",
     `webpack-dev-server/client?http://localhost:${port}/`,
-    'webpack/hot/only-dev-server',
-    require.resolve('../app/index')
+    "webpack/hot/only-dev-server",
+    require.resolve("../app/index")
   ],
 
   output: {
     publicPath: `http://localhost:${port}/dist/`,
-    filename: 'renderer.dev.js'
+    filename: "renderer.dev.js"
   },
 
   module: {
@@ -65,7 +65,7 @@ export default merge.smart(baseConfig, {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             cacheDirectory: true
           }
@@ -75,29 +75,29 @@ export default merge.smart(baseConfig, {
         test: /\.less$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: "style-loader",
             options: {
               sourceMap: true
             }
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               importLoaders: 1,
               sourceMap: true
             }
           },
-          AntdScssThemePlugin.themify('less-loader')
+          AntdScssThemePlugin.themify("less-loader")
         ]
       },
       {
         test: /\.global\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: "style-loader"
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               sourceMap: true
             }
@@ -108,15 +108,15 @@ export default merge.smart(baseConfig, {
         test: /^((?!\.global).)*\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: "style-loader"
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
+              localIdentName: "[name]__[local]__[hash:base64:5]"
             }
           }
         ]
@@ -126,16 +126,16 @@ export default merge.smart(baseConfig, {
         test: /\.global\.(scss|sass)$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: "style-loader"
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               sourceMap: true
             }
           },
           AntdScssThemePlugin.themify({
-            loader: 'sass-loader'
+            loader: "sass-loader"
           })
         ]
       },
@@ -144,19 +144,19 @@ export default merge.smart(baseConfig, {
         test: /^((?!\.global).)*\.(scss|sass)$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: "style-loader"
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
+              localIdentName: "[name]__[local]__[hash:base64:5]"
             }
           },
           AntdScssThemePlugin.themify({
-            loader: 'sass-loader'
+            loader: "sass-loader"
           })
         ]
       },
@@ -164,10 +164,10 @@ export default merge.smart(baseConfig, {
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
+            mimetype: "application/font-woff"
           }
         }
       },
@@ -175,10 +175,10 @@ export default merge.smart(baseConfig, {
       {
         test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
+            mimetype: "application/font-woff"
           }
         }
       },
@@ -186,10 +186,10 @@ export default merge.smart(baseConfig, {
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 10000,
-            mimetype: 'application/octet-stream'
+            mimetype: "application/octet-stream"
           }
         }
       },
@@ -197,27 +197,27 @@ export default merge.smart(baseConfig, {
       {
         test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
         use: {
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 10000,
-            mimetype: 'font/opentype'
+            mimetype: "font/opentype"
           }
         }
       },
       // EOT Font
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader'
+        use: "file-loader"
       },
       // SVG Font
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
-            loader: 'babel-loader'
+            loader: "babel-loader"
           },
           {
-            loader: '@svgr/webpack',
+            loader: "@svgr/webpack",
             options: {
               babel: false,
               icon: true
@@ -235,7 +235,7 @@ export default merge.smart(baseConfig, {
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader'
+        use: "url-loader"
       }
     ]
   },
@@ -244,12 +244,12 @@ export default merge.smart(baseConfig, {
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
-          context: path.join(__dirname, '..', 'dll'),
+          context: path.join(__dirname, "..", "dll"),
           manifest: require(manifest),
-          sourceType: 'var'
+          sourceType: "var"
         }),
 
-    new AntdScssThemePlugin(path.join(__dirname, 'theme.scss')),
+    new AntdScssThemePlugin(path.join(__dirname, "theme.scss")),
 
     new webpack.HotModuleReplacementPlugin({
       multiStep: true
@@ -270,7 +270,7 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development'
+      NODE_ENV: "development"
     }),
 
     new webpack.LoaderOptionsPlugin({
@@ -288,12 +288,12 @@ export default merge.smart(baseConfig, {
     publicPath,
     compress: true,
     noInfo: true,
-    stats: 'errors-only',
+    stats: "errors-only",
     inline: true,
     lazy: false,
     hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
+    headers: { "Access-Control-Allow-Origin": "*" },
+    contentBase: path.join(__dirname, "dist"),
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
@@ -305,14 +305,14 @@ export default merge.smart(baseConfig, {
     },
     before() {
       if (process.env.START_HOT) {
-        console.log('Starting Main Process...');
-        spawn('npm', ['run', 'start-main-dev'], {
+        console.log("Starting Main Process...");
+        spawn("npm", ["run", "start-main-dev"], {
           shell: true,
           env: process.env,
-          stdio: 'inherit'
+          stdio: "inherit"
         })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+          .on("close", code => process.exit(code))
+          .on("error", spawnError => console.error(spawnError));
       }
     }
   }

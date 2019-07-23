@@ -46,7 +46,7 @@ class InputGroup extends React.Component {
           <Icon type="reload" style={{ fontSize: "24px" }} />
         </a>
         {fieldsList.map((field, index) => (
-          <Form.Item key={field.name} style={{ marginBottom: "10px" }}>
+          <Form.Item key={field.name} style={{ marginBottom: "0px" }}>
             {getFieldDecorator(field.name, {
               rules: [
                 {

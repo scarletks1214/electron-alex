@@ -1,0 +1,38 @@
+[
+  {
+    "key": 2,
+    "email": "bundgsan1@gmail.com",
+    "password": "PSmati28",
+    "proxy": "None",
+    "category": "Friend",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0,
+    "actions": [true, true],
+    "edit": true
+  },
+  {
+    "key": 1,
+    "email": "lodsgala@gmail.com",
+    "password": "PSmati29",
+    "proxy": "None",
+    "category": "Family",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0,
+    "actions": [true, true],
+    "edit": true
+  },
+  {
+    "key": 0,
+    "email": "lodggnsala@gmail.com",
+    "password": "PSmati30",
+    "proxy": "None",
+    "category": "None",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0,
+    "actions": [true, true],
+    "edit": true
+  }
+]

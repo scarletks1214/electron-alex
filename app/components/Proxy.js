@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Icon, Modal, Input, Spin } from "antd";
+import { Button, Icon, Modal, Input, Spin, Typography } from "antd";
 import EditableFormTable from "./ProxyTable";
 import styles from "./Proxy.scss";
+import { ipcRenderer } from "electron";
 
 const ButtonGroup = Button.Group;
 const TextArea = Input.TextArea;
@@ -9,6 +10,8 @@ const TextArea = Input.TextArea;
 const remote = require("electron").remote;
 const dialog = remote.dialog;
 const fs = require("fs");
+
+const { Text } = Typography;
 
 export default class Proxy extends React.Component {
   constructor(props) {
@@ -132,6 +135,11 @@ export default class Proxy extends React.Component {
     });
   };
 
+  setTestUrl = e => {
+    console.log("url", e.target.value);
+    ipcRenderer.send("setTestUrl", { url: e.target.value });
+  };
+
   render() {
     return (
       <Spin
@@ -163,12 +171,16 @@ export default class Proxy extends React.Component {
               Export Tested
             </Button>
           </ButtonGroup>
+          <Text style={{ marginLeft: "20px" }}>Test URL:</Text>
+          <Input
+            defaultValue="https://kith.com"
+            style={{ width: "250px", marginLeft: "20px" }}
+            onChange={this.setTestUrl}
+          />
           <ButtonGroup className={styles.actionbuttons}>
             <Button
-              type="primary"
               disabled={this.props.editingKey !== -1}
               onClick={this.testAll}
-              className={styles.startbutton}
             >
               <Icon type="play-square" />
               Test All
@@ -176,7 +188,6 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteAll}
-              className={styles.deletebutton}
             >
               <Icon type="delete" />
               Delete All
@@ -184,7 +195,6 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteBad}
-              className={styles.deletebutton}
             >
               <Icon type="delete" />
               Delete Bad

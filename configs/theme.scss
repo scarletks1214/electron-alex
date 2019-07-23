@@ -1,7 +1,18 @@
-$primary-color: #647bff;
+$bg-color: #101010;
+$primary-color: #0d7377;
 $secondary-color: #647b00;
+$table-header-bg: #161616;
+$table-header-color: white;
+$table-row-hover-bg: rgba(181, 84, 0, 0.1);
 
+$disabled-color: black;
+$btn-default-color: white;
+$btn-default-bg: #323232;
+$input-color: black;
+
+$layout-body-background: $bg-color;
 $menu-bg: transparent;
+$black: rgb(238, 216, 216);
 
 // menu active transparent
 $menu-item-active-bg: #fff;

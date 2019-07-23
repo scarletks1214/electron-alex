@@ -136,6 +136,7 @@ let youtube_duration_max = 4;
 let gsearch_duration_min = 0.01;
 let gsearch_duration_max = 0.1;
 let total_loop = 1;
+let testUrl = "https://kith.com";
 
 Nightmare.action(
   "show",
@@ -234,24 +235,9 @@ const runTask = async task => {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.54 Safari/537.36"
       )
       .authentication(username, password)
-      .goto("https://www.google.com")
-      .cookies.clearAll()
-      .header(
-        "x-chrome-id-consistency-request",
-        "version=1,client_id=77185425430.apps.googleusercontent.com,device_id=db988b4e-56d9-4514-82ab-78f49fdcb703,signin_mode=all_accounts,signout_mode=show_confirmation"
-      )
-      .header(
-        "x-client-data",
-        "CIe2yQEIpbbJAQjUt8kBCIiSygEIqp3KAQjIo8oBCKulygEIoKnKAQiXrcoBCM2tygEIsa7KAQjGr8oB"
-      )
-      .header("cache-control", "max-age=0")
-      .header("accept-language", "en-US,en;q=0.9")
       .goto(
         "https://accounts.google.com/signin/v2/identifier?passive=1209600&continue=https%3A%2F%2Faccounts.google.com%2FManageAccount&followup=https%3A%2F%2Faccounts.google.com%2FManageAccount&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
       )
-      .cookies.get()
-      .then(cookie => console.log("cookie", cookie));
-    await nightmare
       .wait("#identifierId")
       .type("#identifierId", task.email)
       .type("#identifierId", "\u000d")
@@ -273,10 +259,6 @@ const runTask = async task => {
   bot.timeId = id;
 
   sender.send("actionLog", { status: "Marinating", email: task.email });
-  // mySocket.emit("actionLog", {
-  //   email: task.email,
-  //   status: "Marinating"
-  // });
 
   const targets = myTargets.slice(0);
   try {
@@ -360,10 +342,6 @@ const startTask = task => {
     runTask(task);
   } else {
     console.log("resuming task ....", task.email);
-    // mySocket.emit("actionLog", {
-    //   email: task.email,
-    //   status: "Marinating"
-    // });
     sender.send("actionLog", "Marinating");
     const bot = paused_bots[index];
     paused_bots.splice(index, 1);
@@ -405,10 +383,6 @@ const pauseTask = async task => {
 
   try {
     console.log("pausing task ....", task.email);
-    // mySocket.emit("actionLog", {
-    //   email: task.email,
-    //   status: "Napping"
-    // });
     sender.send("actionLog", { email: task.email, status: "Napping" });
     const nightmare = running_bots[index].nightmare;
     running_profiles -= 1;
@@ -517,24 +491,31 @@ app.post("/checkproxy", (req, res) => {
       req.body.myProxy
     }`;
 
-  request.get(
-    "https://www.google.com",
+  let timeId;
+  const r = request.get(
+    testUrl,
     {
       proxy,
-      timeout: 5000,
       time: true
     },
     (err, resp) => {
       if (err) {
-        console.log("false", err);
+        clearTimeout(timeId);
         res.send("bad");
       } else {
+        clearTimeout(timeId);
         res.send(resp.elapsedTime + "");
       }
     }
   );
+
+  timeId = setTimeout(() => r.abort(), 5000);
 });
 
 export const setSender = emitter => {
   sender = emitter;
+};
+
+export const setTestUrl = url => {
+  testUrl = url;
 };

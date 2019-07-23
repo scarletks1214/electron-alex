@@ -14,6 +14,7 @@ import {
 
 import ButtonGroup from "antd/lib/button/button-group";
 import TextArea from "antd/lib/input/TextArea";
+import { white } from "ansi-colors";
 
 const ipcRenderer = require("electron").ipcRenderer;
 
@@ -32,14 +33,14 @@ class DurationArea extends React.Component {
             min={0}
             max={this.props.max}
           />
-          <h4> - </h4>
+          <h4 style={{ color: "white" }}> - </h4>
           <InputNumber
             value={this.props.max}
             className={styles.durinput}
             onChange={v => this.props.change(this.props.type, "max", v)}
             min={this.props.min}
           />
-          <h4>mins</h4>
+          <h4 style={{ color: "white" }}>mins</h4>
         </span>
       </div>
     );
@@ -86,8 +87,7 @@ class CustomCheckBox extends React.Component {
             <Col
               span={6}
               style={{
-                backgroundColor:
-                  this.props.theme == "dark" ? "#001529" : "#ffffff",
+                backgroundColor: "black",
                 height: "100%"
               }}
             />
@@ -100,14 +100,13 @@ class CustomCheckBox extends React.Component {
               style={{
                 width: "100%",
                 height: "20%",
-                background:
-                  this.props.navigation == "noside" ? "#001529" : "#fff"
+                background: "black"
               }}
             />
             <div
               style={{
                 width: "100%",
-                backgroundColor: "#f0f2f5",
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
                 height: "80%"
               }}
             >
@@ -218,30 +217,7 @@ export default class Settings extends React.Component {
             <Card type="inner" title="Style Settings">
               <div className={styles.cardcontent}>
                 <div className={styles.style_setting}>
-                  <h4>Page style setting</h4>
-                  <div>
-                    <Row gutter={20}>
-                      <Col span={3}>
-                        <CustomCheckBox
-                          checked={this.props.theme == "dark" ? true : false}
-                          theme="dark"
-                          style={{ display: "inline" }}
-                          setCheck={this.setCheck}
-                        />
-                      </Col>
-                      <Col span={3}>
-                        <CustomCheckBox
-                          checked={this.props.theme == "light" ? true : false}
-                          theme="light"
-                          style={{ display: "inline" }}
-                          setCheck={this.setCheck}
-                        />
-                      </Col>
-                    </Row>
-                  </div>
-                </div>
-                <div className={styles.style_setting}>
-                  <h4>Navigation Mode</h4>
+                  <h4 style={{ color: "white" }}>Navigation Mode</h4>
                   <div>
                     <Row gutter={20}>
                       <Col span={3}>
@@ -273,7 +249,7 @@ export default class Settings extends React.Component {
           <Col className="ant-col-12">
             <Card type="inner" title="Task Settings">
               <div className={styles.cardcontent}>
-                <h4>Organization</h4>
+                <h4 style={{ color: "white" }}>Organization</h4>
                 <div style={{ marginTop: "30px", marginBottom: "50px" }}>
                   <DurationArea
                     type="run"
@@ -297,7 +273,7 @@ export default class Settings extends React.Component {
                     />
                   </div>
                 </div>
-                <h4>Targets</h4>
+                <h4 style={{ color: "white" }}>Targets</h4>
                 <div className={styles.target_container}>
                   <div className={styles.target}>
                     <p className={styles.label}>Google Search</p>

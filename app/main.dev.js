@@ -15,7 +15,8 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import * as taskBot from "./utils/taskBot";
 import profile_converter from "./utils/profile-conveter";
-import fs from "fs";
+import keytar from "keytar";
+import open from "open";
 
 export default class AppUpdater {
   constructor() {
@@ -80,14 +81,16 @@ app.on("ready", async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    minWidth: 1280,
-    minHeight: 720,
-    width: 1280,
-    height: 720,
+    minWidth: 450,
+    minHeight: 200,
+    width: 450,
+    height: 200,
     frame: false,
     titleBarStyle: "border-radius: 50px",
     transparent: true
   });
+
+  mainWindow.setResizable(false);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
   mainWindow.setMenu(null);
@@ -103,6 +106,11 @@ app.on("ready", async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+  });
+
+  mainWindow.webContents.on("new-window", function(event, url) {
+    event.preventDefault();
+    open(url);
   });
 
   mainWindow.on("closed", () => {
@@ -165,4 +173,22 @@ ipcMain.on("convertProfile", (event, data) => {
   console.log(src_path, dst_path, src_format, dst_format);
   profile_converter(src_path, dst_path, src_format, dst_format);
   event.returnValue = "converted";
+});
+
+ipcMain.on("setTestUrl", (event, data) => {
+  taskBot.setTestUrl(data.url);
+});
+
+ipcMain.on("activated", (event, data) => {
+  console.log("activated");
+  mainWindow.setSize(1360, 768);
+  mainWindow.setResizable(true);
+  mainWindow.setMinimumSize(1360, 768);
+  mainWindow.setPosition(200, 100);
+  if (data && data.apiKey) keytar.addPassword("apiKey", "OCIO", data.apiKey);
+});
+
+ipcMain.on("getApiKey", async (event, data) => {
+  const key = await keytar.getPassword("apiKey", "OCIO");
+  event.returnValue = key;
 });

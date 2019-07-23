@@ -140,7 +140,6 @@ export default class Account extends React.Component {
           <div className={styles.actionbuttons}>
             <Search style={{ width: 250 }} placeholder="Search ..." />
             <Button
-              type="primary"
               onClick={this.exportAccounts}
               className={styles.exportbutton}
             >

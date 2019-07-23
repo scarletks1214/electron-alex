@@ -1,0 +1,32 @@
+[
+  {
+    "key": 2,
+    "ipaddr": "149.56.133.81",
+    "port": "3128",
+    "username": "",
+    "password": "",
+    "validation": [true, true],
+    "edit": true,
+    "speed": 1683
+  },
+  {
+    "key": 1,
+    "ipaddr": "142.4.196.108",
+    "port": "3128",
+    "username": "",
+    "password": "",
+    "validation": [true, true],
+    "edit": true,
+    "speed": 1662
+  },
+  {
+    "key": 0,
+    "ipaddr": "142.4.196.107",
+    "port": "3128",
+    "username": "",
+    "password": "",
+    "validation": [true, true],
+    "edit": true,
+    "speed": 1654
+  }
+]

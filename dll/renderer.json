@@ -44,8 +44,13 @@
     },
     "history": { "id": "history", "buildMeta": { "providedExports": true } },
     "json2csv": { "id": "json2csv", "buildMeta": { "providedExports": true } },
+    "keytar": { "id": "keytar", "buildMeta": { "providedExports": true } },
     "less-loader": {
       "id": "less-loader",
+      "buildMeta": { "providedExports": true }
+    },
+    "macaddress": {
+      "id": "macaddress",
       "buildMeta": { "providedExports": true }
     },
     "nightmare": {
@@ -56,6 +61,7 @@
       "id": "@svgr/webpack",
       "buildMeta": { "providedExports": true }
     },
+    "open": { "id": "open", "buildMeta": { "providedExports": true } },
     "path": { "id": "path", "buildMeta": { "providedExports": true } },
     "react": { "id": "react", "buildMeta": { "providedExports": true } },
     "react-dom": {

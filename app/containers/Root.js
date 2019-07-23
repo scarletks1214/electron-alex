@@ -18,11 +18,6 @@ type Props = {
 
 class Root extends Component<Props> {
   componentDidMount() {
-    // const endpoint = "http://localhost:5000";
-    // const socket = socketIOClient(endpoint);
-    // socket.on("actionLog", data => {
-    //   this.props.changeField(data.email, "actionlog", data.status);
-    // });
     const accPath = __dirname + "/__accs.json";
     const prxPath = __dirname + "/__prxs.json";
     ipcRenderer.on("actionLog", (event, data) => {

@@ -198,10 +198,8 @@ export default class Account extends React.Component {
           </ButtonGroup>
           <ButtonGroup className={styles.actionbuttons}>
             <Button
-              type="primary"
               disabled={this.props.editingKey !== -1}
               onClick={this.enableAll}
-              className={styles.enablebutton}
             >
               <Icon type="check-square" />
               Enable All
@@ -209,16 +207,13 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.disableAll}
-              className={styles.disablebutton}
             >
               <Icon type="stop" />
               Disable All
             </Button>
             <Button
-              type="primary"
               disabled={this.props.editingKey !== -1}
               onClick={this.startAll}
-              className={styles.startbutton}
             >
               <Icon type="play-square" />
               Start All
@@ -226,7 +221,6 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.stopAll}
-              className={styles.stopbutton}
             >
               <Icon type="pause-circle" />
               Stop All
@@ -234,7 +228,6 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteAll}
-              className={styles.stopbutton}
             >
               <Icon type="delete" />
               Delete All
