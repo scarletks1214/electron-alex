@@ -1,13 +1,14 @@
-$bg-color: #101010;
-$primary-color: #0d7377;
+$bg-color: #23272a;
+$primary-color: #7289da;
 $secondary-color: #647b00;
-$table-header-bg: #161616;
+$table-header-bg: #2c2f33;
 $table-header-color: white;
 $table-row-hover-bg: rgba(181, 84, 0, 0.1);
 
 $disabled-color: black;
 $btn-default-color: white;
-$btn-default-bg: #323232;
+$btn-default-bg: $bg-color;
+
 $input-color: black;
 
 $layout-body-background: $bg-color;

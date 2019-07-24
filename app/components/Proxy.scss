@@ -13,10 +13,7 @@
 }
 
 .deletebutton {
-  color: red !important;
-  &:hover {
-    color: rgba(255, 0, 0, 0.5) !important;
-  }
+  border: 2px solid red !important;
 }
 
 .eyeball {
@@ -60,4 +57,11 @@
 
 .editinput {
   width: 150px;
+}
+
+.startbutton {
+  background: green !important;
+  &:hover {
+    background: rgba(0, 150, 0, 0.9) !important;
+  }
 }

@@ -110,12 +110,12 @@ class AuthContainer extends React.Component {
                 }}
                 strong
               >
-                Activate Your License
+                Authenticate Your License
               </Text>
               <Input
                 defaultValue={this.apiKey}
                 style={{ width: "300px", marginTop: "10px" }}
-                placeholder="Input your api key"
+                placeholder="Enter your key"
                 onChange={this.setApiKey}
               />
             </div>
@@ -123,7 +123,7 @@ class AuthContainer extends React.Component {
               <Button
                 style={{
                   alignSelf: "center",
-                  background: "black",
+                  background: "#23272a",
                   color: "white"
                 }}
                 onClick={this.activateUser}

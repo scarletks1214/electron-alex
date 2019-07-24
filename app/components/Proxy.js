@@ -166,6 +166,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.exportProxies}
+              className={styles.startbutton}
             >
               <Icon type="download" />
               Export Tested
@@ -181,6 +182,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.testAll}
+              type="primary"
             >
               <Icon type="play-square" />
               Test All
@@ -188,6 +190,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteAll}
+              type="danger"
             >
               <Icon type="delete" />
               Delete All
@@ -195,6 +198,7 @@ export default class Proxy extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteBad}
+              type="danger"
             >
               <Icon type="delete" />
               Delete Bad

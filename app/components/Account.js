@@ -191,6 +191,7 @@ export default class Account extends React.Component {
             <Button
               onClick={this.ExportAccounts}
               disabled={this.props.editingKey !== -1}
+              className={styles.startbutton}
             >
               <Icon type="download" />
               Export
@@ -200,6 +201,7 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.enableAll}
+              type="primary"
             >
               <Icon type="check-square" />
               Enable All
@@ -214,6 +216,7 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.startAll}
+              type="primary"
             >
               <Icon type="play-square" />
               Start All
@@ -228,6 +231,7 @@ export default class Account extends React.Component {
             <Button
               disabled={this.props.editingKey !== -1}
               onClick={this.deleteAll}
+              type="danger"
             >
               <Icon type="delete" />
               Delete All

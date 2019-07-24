@@ -163,7 +163,7 @@ class Routes extends React.Component<Props> {
             style={{
               margin: "24px 16px",
               padding: 24,
-              background: "#101010"
+              background: "#23272A"
             }}
           >
             <App>

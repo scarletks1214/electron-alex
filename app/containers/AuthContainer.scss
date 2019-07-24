@@ -2,13 +2,13 @@
 @import "../../configs/config.scss";
 
 .authcontainer {
-  background: black;
+  background: $bg-color;
   color: white;
   min-width: 450px;
   width: 450px;
   height: 200px;
   input {
-    background: black !important;
+    background: $bg-color !important;
     color: white;
   }
   .sider {

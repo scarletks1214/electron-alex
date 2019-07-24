@@ -57,6 +57,10 @@
 .exportbutton {
   width: 120px;
   margin-left: 10px;
+  background: green !important;
+  &:hover {
+    background: rgba(0, 150, 0, 0.9) !important;
+  }
 }
 
 .closeicon {
@@ -80,4 +84,11 @@
 
 .editinput {
   width: 150px;
+}
+
+.startbutton {
+  background: green !important;
+  &:hover {
+    background: rgba(0, 150, 0, 0.9) !important;
+  }
 }
