@@ -92,3 +92,13 @@
     background: rgba(0, 150, 0, 0.9) !important;
   }
 }
+
+.reload {
+  display: inline;
+  float: right;
+  margin-top: 10px;
+  color: black;
+  :hover {
+    color: $primary-color;
+  }
+}

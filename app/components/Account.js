@@ -303,7 +303,7 @@ export default class Account extends React.Component {
           <TextArea
             onChange={e => this.setState({ newAccounts: e.target.value })}
             style={{ height: "300px" }}
-            placeholder="Email:Password(:IP:Port(:Username:Password))"
+            placeholder="Email:Password"
             value={this.state.newAccounts}
           />
         </Modal>

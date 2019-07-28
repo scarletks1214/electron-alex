@@ -11,9 +11,13 @@ class EditableCell extends React.Component {
   getInput = () => {
     switch (this.props.dataIndex) {
       case "password":
-        return <InputPassword style={{ width: 150 }} />;
+        return <InputPassword style={{ width: 200 }} />;
+      case "port":
+        return <Input style={{ width: 150 }} />;
+      case "ipaddr":
+        return <Input style={{ width: "250px" }} />;
       default:
-        return <Input style={{ width: "150px" }} />;
+        return <Input style={{ width: "200px" }} />;
     }
   };
 
@@ -69,28 +73,24 @@ class EditableTable extends React.Component {
   columns = [
     {
       title: "IP Address",
-      align: "center",
       dataIndex: "ipaddr",
       key: "ipaddr",
       editable: true
     },
     {
       title: "Port Number",
-      align: "center",
       dataIndex: "port",
       key: "port",
       editable: true
     },
     {
       title: "Username",
-      align: "center",
       dataIndex: "username",
       key: "username",
       editable: true
     },
     {
       title: "Password",
-      align: "center",
       dataIndex: "password",
       key: "password",
       editable: true,
@@ -101,7 +101,6 @@ class EditableTable extends React.Component {
     },
     {
       title: "Validation",
-      align: "center",
       dataIndex: "validation",
       key: "validation",
       render: (actions, record) => (
@@ -139,7 +138,6 @@ class EditableTable extends React.Component {
     },
     {
       title: "Speed",
-      align: "center",
       dataIndex: "speed",
       key: "speed",
       render: speed => (speed !== "bad" ? speed + "MS" : "")
@@ -148,7 +146,6 @@ class EditableTable extends React.Component {
       title: "",
       dataIndex: "edit",
       key: "edit",
-      align: "center",
       render: (value, record) => (
         <div>
           {this.isEditing(record) ? (
@@ -220,7 +217,7 @@ class EditableTable extends React.Component {
   }
 
   updateWindowDimensions() {
-    const divisions = [4.5, 8, 6, 6, 10, 12];
+    const divisions = [4, 8, 5, 5, 10, 12];
     for (let i = 0; i < 6; i += 1) {
       this.columns[i].width = (window.innerWidth - 100) / divisions[i];
     }

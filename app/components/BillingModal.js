@@ -1,6 +1,9 @@
 import React from "react";
 import { Modal, Checkbox } from "antd";
-import { Row, Col, Input, Form, Icon } from "antd";
+import { Row, Col, Input, Form, Icon, Typography } from "antd";
+import styles from "./Billing.scss";
+
+const { Text } = Typography;
 
 class InputGroup extends React.Component {
   inputRef = [];
@@ -23,9 +26,30 @@ class InputGroup extends React.Component {
       fieldsList.forEach(field => onChangeField(field.name));
     }
   };
-  onChangeField = field => {
+  onChangeField = (field, e) => {
     if (this.props.title === "BILLING") {
-      this.props.onChangeField(field);
+      this.props.onChangeField(field, e.target.value);
+    }
+  };
+  isNumber = (rule, value, cb) => {
+    if (isNaN(value)) {
+      cb("This field should be number");
+    } else {
+      cb();
+    }
+  };
+  isVisa = (rule, value, cb) => {
+    if (
+      !value.match(
+        "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$"
+      ) &&
+      !value.match("^6(?:011|5[0-9]{2})[0-9]{12}$") &&
+      !value.match("^4[0-9]{12}(?:[0-9]{3})?$") &&
+      !value.match("^3[47][0-9]{13}$")
+    ) {
+      cb("This field should be visa master");
+    } else {
+      cb();
     }
   };
   render() {
@@ -35,23 +59,37 @@ class InputGroup extends React.Component {
       <div>
         <h1 style={{ display: "inline" }}>{title}</h1>
         <a
-          style={{
-            display: "inline",
-            float: "right",
-            marginTop: "10px"
-          }}
+          className={styles.reload}
           onClick={this.resetFields}
           disabled={disabled}
         >
-          <Icon type="reload" style={{ fontSize: "24px" }} />
+          <Icon
+            type="reload"
+            style={{
+              fontSize: "24px"
+            }}
+          />
         </a>
         {fieldsList.map((field, index) => (
           <Form.Item key={field.name} style={{ marginBottom: "0px" }}>
             {getFieldDecorator(field.name, {
               rules: [
                 {
-                  required: true,
-                  message: `Please input the ${field.placeholder}!`
+                  validator:
+                    field.name === "CardNumber"
+                      ? this.isNumber
+                      : field.name === "CardType"
+                      ? this.isVisa
+                      : null,
+                  required:
+                    field.name.includes("address2") ||
+                    field.name.includes("address3")
+                      ? false
+                      : true,
+                  message:
+                    field.name === "CardType"
+                      ? "Please enter one of the following {VISA; MASTERCARD; DISCOVER; AMEX"
+                      : `Please input the ${field.placeholder}!`
                 }
               ],
               initialValue: data ? data[field.name] : ""
@@ -59,7 +97,7 @@ class InputGroup extends React.Component {
               <Input
                 placeholder={field.placeholder}
                 disabled={disabled}
-                onChange={value => this.onChangeField(field.name)}
+                onChange={e => this.onChangeField(field.name, e)}
               />
             )}
           </Form.Item>
@@ -198,12 +236,12 @@ class BillingModal extends React.Component {
     }
   ];
 
-  onChangeField = fieldName => {
+  onChangeField = (fieldName, value) => {
     if (this.state.disabled) {
       const index = this.billingFieldsList.findIndex(
         field => field.name === fieldName
       );
-      this.setShippingAsBilling(index);
+      this.setShippingAsBilling(index, value);
     }
   };
 
@@ -214,12 +252,14 @@ class BillingModal extends React.Component {
     };
   }
 
-  setShippingAsBilling = index => {
+  setShippingAsBilling = (index, value) => {
     const val = {};
     const { form } = this.props;
-    val[this.shippingFieldsList[index].name] = form.getFieldsValue([
-      this.billingFieldsList[index].name
-    ])[this.billingFieldsList[index].name];
+    val[this.shippingFieldsList[index].name] = value
+      ? value
+      : form.getFieldsValue([this.billingFieldsList[index].name])[
+          this.billingFieldsList[index].name
+        ];
     form.setFieldsValue(val);
   };
 
@@ -243,7 +283,7 @@ class BillingModal extends React.Component {
         onCancel={onCancel}
         onOk={onSave}
         okText="Save"
-        width={1000}
+        width={900}
         centered
       >
         <Form style={{ marginTop: "20px" }}>
@@ -287,14 +327,22 @@ class BillingModal extends React.Component {
                 initialValue: data ? data.ShippingAsBilling : false
               })(
                 <Checkbox onChange={this.setBillingtoShipping}>
-                  Use Billing Address as Shipping Address
+                  <Text style={{ color: "black" }}>
+                    Use Billing Address as Shipping Address
+                  </Text>
                 </Checkbox>
               )}
             </Form.Item>
             <Form.Item style={{ marginBottom: "0px" }}>
               {getFieldDecorator("CheckoutOncePerWebsite", {
                 initialValue: data ? data.CheckoutOncePerWebsite : false
-              })(<Checkbox>Enable One-time Checkout</Checkbox>)}
+              })(
+                <Checkbox>
+                  <Text style={{ color: "black" }}>
+                    Enable One-time Checkout
+                  </Text>
+                </Checkbox>
+              )}
             </Form.Item>
           </Row>
         </Form>
