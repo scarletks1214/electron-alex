@@ -589,6 +589,18 @@ eval("module.exports = unzip;\n\n//# sourceURL=webpack://renderer/external_%22un
 
 eval("module.exports = wait-until;\n\n//# sourceURL=webpack://renderer/external_%22wait-until%22?");
 
+/***/ }),
+
+/***/ "ws":
+/*!*********************!*\
+  !*** external "ws" ***!
+  \*********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = ws;\n\n//# sourceURL=webpack://renderer/external_%22ws%22?");
+
 /***/ })
 
 /******/ });

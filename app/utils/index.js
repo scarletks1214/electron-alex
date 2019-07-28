@@ -24,4 +24,4 @@ export const billingFileFormats = [
   { name: "Yitian", format: "yitan" }
 ];
 
-export const socketUrl = "https://localhost:3000";
+export const socketUrl = "ws://18.205.191.187:3001";

@@ -3,16 +3,17 @@ import { Input, Icon, Col, Row, Typography, notification } from "antd";
 import { Button } from "antd/lib/radio";
 import styles from "./AuthContainer.scss";
 import { ipcRenderer } from "electron";
-import socketIOClient from "socket.io-client";
+//import socketIOClient from "socket.io-client";
 import macaddress from "macaddress";
+import Websocket from "ws";
 
-import socketUrl from "../utils";
+import { socketUrl } from "../utils";
 
 const { app } = require("electron").remote;
 const { Text } = Typography;
 
 class AuthContainer extends React.Component {
-  socket = null;
+  socket = new Websocket(socketUrl);
   apiKey = "";
   constructor(props) {
     super(props);
@@ -27,33 +28,48 @@ class AuthContainer extends React.Component {
     }
   }
   componentDidMount() {
-    this.socket = new socketIOClient(socketUrl);
-    this.socket.emit("checkVersion");
+    this.socket.onopen = () => {
+      console.log("socket connected");
+      this.socket.send(JSON.stringify({ event: "latestVersion" }));
+    };
 
-    this.socket.on("keyCheckResult", data => {
-      if (!data.code) {
-        this.setState({ authenticated: true, loading: false });
-        ipcRenderer.send("activated", { apiKey: this.apiKey });
-      } else {
-        notification.error({
-          placement: "bottomRight",
-          duration: 3,
-          message: "Error",
-          description: data.message
-        });
-        this.setState({ loading: false });
+    this.socket.onmessage = evt => {
+      const evtData = JSON.parse(evt.data);
+      const { event, data } = evtData;
+      console.log("new message", event, data);
+      switch (event) {
+        case "keyCheckResult": {
+          if (!data.code) {
+            this.setState({ authenticated: true, loading: false });
+            ipcRenderer.send("activated", { apiKey: this.apiKey });
+          } else {
+            notification.error({
+              placement: "bottomRight",
+              duration: 3,
+              message: "Error",
+              description: data.message
+            });
+            this.setState({ loading: false });
+          }
+          break;
+        }
+        case "latestVersionResult": {
+          const { version, link } = data;
+          if (Object.keys(data).length > 0 && version !== app.getVersion())
+            this.newVersionNotification(version, link);
+          break;
+        }
+        case "newVersion": {
+          const { version, link } = data;
+          this.newVersionNotification(version, link);
+          break;
+        }
       }
-    });
-
-    this.socket.on("checkVersionResult", data => {
-      const { version, link } = data;
-      if (version !== app.getVersion())
-        this.newVersionNotification(version, link);
-    });
-    this.socket.on("newVersion", data => {
-      const { version, link } = data;
-      this.newVersionNotification(version, link);
-    });
+    };
+    this.socket.onclose = () => {
+      console.log("disconnected");
+      this.socket = new Websocket(socketUrl);
+    };
   }
   newVersionNotification = (version, link) => {
     notification.info({
@@ -76,9 +92,14 @@ class AuthContainer extends React.Component {
   activateUser = () => {
     this.setState({ loading: true });
     macaddress.one((err, mac) => {
-      this.socket.emit("keyCheck", mac, this.apiKey);
-      ipcRenderer.send("activated");
-      this.setState({ loading: true, authenticated: true });
+      this.socket.send(
+        JSON.stringify({
+          event: "keyCheck",
+          data: { macAddress: mac, key: this.apiKey }
+        })
+      );
+      // ipcRenderer.send("activated");
+      // this.setState({ loading: true, authenticated: true });
     });
   };
   setApiKey = e => {
