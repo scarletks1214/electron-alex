@@ -106,3 +106,8 @@ a:hover {
 .ant-notification-notice-description {
   color: black;
 }
+
+.ant-layout-footer {
+  background: $bg-color;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}

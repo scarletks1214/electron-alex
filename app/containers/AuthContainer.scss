@@ -38,3 +38,12 @@
     padding-left: calc(50% - 70px);
   }
 }
+
+.link {
+  display: inline;
+  margin-left: 5px;
+  color: $primary-color;
+  :hover {
+    opacity: 0.5;
+  }
+}

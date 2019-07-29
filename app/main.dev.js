@@ -15,7 +15,7 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import * as taskBot from "./utils/taskBot";
 import profile_converter from "./utils/profile-conveter";
-import keytar from "keytar";
+import * as keytar from "keytar";
 import open from "open";
 
 export default class AppUpdater {
@@ -185,7 +185,7 @@ ipcMain.on("activated", (event, data) => {
   mainWindow.setResizable(true);
   mainWindow.setMinimumSize(1360, 768);
   mainWindow.setPosition(200, 100);
-  if (data && data.apiKey) keytar.addPassword("apiKey", "OCIO", data.apiKey);
+  if (data && data.apiKey) keytar.setPassword("apiKey", "OCIO", data.apiKey);
 });
 
 ipcMain.on("getApiKey", async (event, data) => {

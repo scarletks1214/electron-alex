@@ -18,6 +18,15 @@ type Props = {
 
 class Root extends Component<Props> {
   componentDidMount() {
+    if (this.props.socket.readyState) {
+      this.props.socket.send(JSON.stringify({ event: "latestVersion" }));
+    } else {
+      this.props.socket.onopen = () => {
+        console.log("socket connected");
+        this.props.socket.send(JSON.stringify({ event: "latestVersion" }));
+      };
+    }
+
     const accPath = __dirname + "/__accs.json";
     const prxPath = __dirname + "/__prxs.json";
     ipcRenderer.on("actionLog", (event, data) => {

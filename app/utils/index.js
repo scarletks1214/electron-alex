@@ -1,5 +1,7 @@
+const path = require("path");
+
 export const billingFileFormats = [
-  { name: "Profiles", format: "profiles" },
+  { name: "CSV", format: "aiomoji" },
   { name: "Aiomoji", format: "aiomoji" },
   { name: "ANB AIO", format: "anbaio" },
   { name: "Balkobot", format: "balko" },
@@ -25,3 +27,8 @@ export const billingFileFormats = [
 ];
 
 export const socketUrl = "ws://18.205.191.187:3001";
+
+export const basicURL =
+  process.env.NODE_ENV === "development"
+    ? "bin"
+    : path.join(process.resourcesPath, "bin");

@@ -106,8 +106,8 @@ function simpleRemapFrom(row, format) {
 	return result;
 }
 
-module.exports = {
-	'aiomoji' : {
+export default {
+	aiomoji : {
 		map: { 
 		  'Profile Name':ProfileName,
 		  'Email Address':Email, // or paypal email
@@ -179,7 +179,7 @@ module.exports = {
 		intoDefault: simpleRemapInto,
 		fromDefault: simpleRemapFrom,
 	},
-	'defJSON' : {
+	defJSON : {
 		map:  {
 			ProfileName: ProfileName,
 			ShippingAsBilling : ShippingAsBilling,

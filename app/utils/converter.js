@@ -1,6 +1,6 @@
-const io = require("./local-io");
+const io = require("./local-io").io;
 const fs = require("fs");
-const maps = require("./maps");
+const maps = require("./maps").default;
 const jsonCSVParser = require("json2csv").parse;
 
 const formats = {
@@ -191,4 +191,4 @@ function convert(sourceFile, targetFile, sourceFormatName, targetFormatName) {
   });
 }
 
-module.exports = { convert };
+export { convert };

@@ -16,8 +16,9 @@ class ImportBillingModal extends React.Component {
       fileType: null
     };
   }
-  setFileType = fileType => {
-    this.setState({ fileType });
+  setFileType = name => {
+    const index = billingFileFormats.findIndex(fmt => fmt.name === name);
+    this.setState({ fileType: billingFileFormats[index].format });
   };
   importFile = () => {
     dialog.showOpenDialog(filePath => {
@@ -96,7 +97,7 @@ class ImportBillingModal extends React.Component {
           }}
         >
           {billingFileFormats.map((format, index) => (
-            <Option value={format.format} key={index}>
+            <Option value={format.name} key={index}>
               {format.name}
             </Option>
           ))}

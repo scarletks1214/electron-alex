@@ -3,11 +3,10 @@ import { Input, Icon, Col, Row, Typography, notification } from "antd";
 import { Button } from "antd/lib/radio";
 import styles from "./AuthContainer.scss";
 import { ipcRenderer } from "electron";
-//import socketIOClient from "socket.io-client";
 import macaddress from "macaddress";
 import Websocket from "ws";
 
-import { socketUrl } from "../utils";
+import { socketUrl, basicURL } from "../utils";
 
 const { app } = require("electron").remote;
 const { Text } = Typography;
@@ -17,22 +16,17 @@ class AuthContainer extends React.Component {
   apiKey = "";
   constructor(props) {
     super(props);
-    this.state = {
-      authenticated: false,
-      loading: false
-    };
 
     const apiKey = ipcRenderer.sendSync("getApiKey");
+    this.state = {
+      authenticated: apiKey ? true : false,
+      loading: false
+    };
     if (apiKey) {
-      this.apiKey = apiKey;
+      ipcRenderer.send("activated");
     }
   }
   componentDidMount() {
-    this.socket.onopen = () => {
-      console.log("socket connected");
-      this.socket.send(JSON.stringify({ event: "latestVersion" }));
-    };
-
     this.socket.onmessage = evt => {
       const evtData = JSON.parse(evt.data);
       const { event, data } = evtData;
@@ -60,6 +54,7 @@ class AuthContainer extends React.Component {
           break;
         }
         case "newVersion": {
+          if (!this.state.authenticated) return;
           const { version, link } = data;
           this.newVersionNotification(version, link);
           break;
@@ -79,7 +74,7 @@ class AuthContainer extends React.Component {
       description: (
         <div>
           Download the new version {version}
-          <a href={link} target="_blank" style={{ marginLeft: "5px" }}>
+          <a href={link} target="_blank" className={styles.link}>
             here
           </a>
         </div>
@@ -90,6 +85,17 @@ class AuthContainer extends React.Component {
     ipcRenderer.send("closeWindow");
   };
   activateUser = () => {
+    if (this.socket.readyState === 0) {
+      notification.error({
+        placement: "bottomRight",
+        duration: 3,
+        message: "Error",
+        description: "Network Error"
+      });
+      this.setState({ loading: false });
+      return;
+    }
+
     this.setState({ loading: true });
     macaddress.one((err, mac) => {
       this.socket.send(
@@ -98,8 +104,6 @@ class AuthContainer extends React.Component {
           data: { macAddress: mac, key: this.apiKey }
         })
       );
-      // ipcRenderer.send("activated");
-      // this.setState({ loading: true, authenticated: true });
     });
   };
   setApiKey = e => {
@@ -107,13 +111,16 @@ class AuthContainer extends React.Component {
   };
   render() {
     const { authenticated, loading } = this.state;
+    const prop = { socket: this.socket };
     return authenticated ? (
-      this.props.children
+      React.Children.map(this.props.children, child =>
+        React.cloneElement(child, { ...prop })
+      )
     ) : (
       <div className={styles.authcontainer}>
         <Row>
           <Col span={7} className={styles.sider}>
-            <img style={{ height: "100px" }} src="logo.svg" />
+            <img style={{ height: "100px" }} src={basicURL + "/logo.svg"} />
           </Col>
           <Col span={17}>
             <div className={styles.header}>

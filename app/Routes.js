@@ -14,11 +14,14 @@ import SettingsPage from "./containers/SettingsPage";
 import AccountPage from "./containers/AccountPage";
 import ProxyPage from "./containers/ProxyPage";
 import BillingPage from "./containers/BillingPage";
+import { basicURL } from "./utils";
+
+import { SETTINGS } from "./reducers/types";
 
 import styles from "./App.scss";
 const ipcRenderer = require("electron").ipcRenderer;
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 
 type Props = { history: Object };
 const page_title = ["/", "/proxy", "/billing", "/setting"];
@@ -47,6 +50,11 @@ class Routes extends React.Component<Props> {
     collapsed: false,
     selectedIndex: 0
   };
+
+  componentDidMount() {
+    this.props.setNavigation("side");
+    setTimeout(() => this.props.setNavigation("noside"), 100);
+  }
 
   closeWindow = () => {
     ipcRenderer.send("closeWindow");
@@ -87,15 +95,14 @@ class Routes extends React.Component<Props> {
               className={this.state.collapsed ? styles.foldlogo : styles.logo}
             >
               {this.state.collapsed ? (
-                <img style={{ height: "80px" }} src="logo.svg" />
+                <img style={{ height: "80px" }} src={basicURL + "/logo.svg"} />
               ) : (
-                <img style={{ height: "180px" }} src="logo.svg" />
+                <img style={{ height: "180px" }} src={basicURL + "/logo.svg"} />
               )}
             </div>
             <Menu
               className={styles.antmenu}
               theme={this.props.theme}
-              mode="inline"
               selectedKeys={[this.state.selectedIndex + ""]}
               onClick={this.onClickNavigation}
             >
@@ -119,7 +126,7 @@ class Routes extends React.Component<Props> {
           >
             {this.props.navigation == "noside" && (
               <div className={styles.headerlogo}>
-                <img style={{ height: "70px" }} src="logo.svg" />
+                <img style={{ height: "70px" }} src={basicURL + "/logo.svg"} />
               </div>
             )}
             {this.props.navigation == "side" && (
@@ -137,6 +144,7 @@ class Routes extends React.Component<Props> {
                 mode="horizontal"
                 selectedKeys={[this.state.selectedIndex + ""]}
                 onClick={this.onClickNavigation}
+                forceSubMenuRender={false}
               >
                 {this.items.map((item, index) => (
                   <Menu.Item key={index}>
@@ -179,6 +187,14 @@ class Routes extends React.Component<Props> {
               </Switch>
             </App>
           </Content>
+          <Footer>
+            <a target="_blank" href="https://aestell.com/info/terms/">
+              Terms of Service
+            </a>
+            <span style={{ float: "right" }}>
+              &copy; aestell - All Rights Reserved
+            </span>
+          </Footer>
         </Layout>
       </Layout>
     );
@@ -192,9 +208,17 @@ function mapStateToProps(state) {
   };
 }
 
+function mapStateToDispatch(dispatch) {
+  return {
+    setNavigation: nav => {
+      dispatch({ type: SETTINGS.SETNAVIGATION, nav });
+    }
+  };
+}
+
 export default withRouter(
   connect(
     mapStateToProps,
-    null
+    mapStateToDispatch
   )(Routes)
 );
