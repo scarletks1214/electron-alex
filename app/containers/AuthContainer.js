@@ -27,6 +27,13 @@ class AuthContainer extends React.Component {
     }
   }
   componentDidMount() {
+    this.socket.onopen = () => {
+      console.log("connected");
+      setInterval(
+        () => this.socket.send(JSON.stringify({ event: "keepAlive" })),
+        9000
+      );
+    };
     this.socket.onmessage = evt => {
       const evtData = JSON.parse(evt.data);
       const { event, data } = evtData;
@@ -60,10 +67,6 @@ class AuthContainer extends React.Component {
           break;
         }
       }
-    };
-    this.socket.onclose = () => {
-      console.log("disconnected");
-      this.socket = new Websocket(socketUrl);
     };
   }
   newVersionNotification = (version, link) => {
@@ -160,7 +163,7 @@ class AuthContainer extends React.Component {
                   <div>
                     <Icon type="loading" style={{ marginRight: "20px" }} />
                     <Text strong style={{ color: "white" }}>
-                      Please wait ....
+                      Verifying ....
                     </Text>
                   </div>
                 ) : (

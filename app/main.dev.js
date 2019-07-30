@@ -86,7 +86,7 @@ app.on("ready", async () => {
     width: 450,
     height: 200,
     frame: false,
-    titleBarStyle: "border-radius: 50px",
+    titleBarStyle: "customButtonsOnHover",
     transparent: true
   });
 
