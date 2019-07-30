@@ -24,7 +24,6 @@
     "postinstall": "yarn flow-typed && electron-builder install-app-deps package.json && yarn build-dll && opencollective-postinstall",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
-    "precommit": "lint-staged",
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
@@ -57,7 +56,7 @@
     "appId": "org.altX",
     "extraResources": [
       {
-        "from": "bin",
+        "from": "app/bin",
         "to": "bin"
       },
       {
@@ -87,10 +86,18 @@
       ]
     },
     "win": {
-      "target": ["nsis", "msi"]
+      "target": [
+        "nsis",
+        "msi"
+      ]
     },
     "linux": {
-      "target": ["deb", "rpm", "snap", "AppImage"],
+      "target": [
+        "deb",
+        "rpm",
+        "snap",
+        "AppImage"
+      ],
       "category": "Development"
     },
     "directories": {
@@ -105,7 +112,9 @@
     "createDesktopShortcut": true
   },
   "license": "MIT",
-  "keywords": ["altX"],
+  "keywords": [
+    "altX"
+  ],
   "homepage": "https://github.com",
   "jest": {
     "testURL": "http://localhost/",
@@ -113,11 +122,17 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
       "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     },
-    "moduleFileExtensions": ["js", "jsx", "json"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },
-    "setupFiles": ["./internals/scripts/CheckBuiltsExist.js"]
+    "setupFiles": [
+      "./internals/scripts/CheckBuiltsExist.js"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
