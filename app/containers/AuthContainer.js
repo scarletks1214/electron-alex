@@ -13,7 +13,7 @@ const { app } = require("electron").remote;
 const { Text } = Typography;
 
 class AuthContainer extends React.Component {
-  socket = new Websocket('wss://premws-pt1.365lpodds.com/zap/', 'zap-protocol-v1');
+  socket = new Websocket(socketUrl);
   apiKey = "";
 
   constructor(props) {
@@ -28,32 +28,18 @@ class AuthContainer extends React.Component {
     this.apiKey = ipcRenderer.sendSync("getApiKey");
     this.socket.onopen = () => {
       console.log("connected");
-      // if (this.apiKey) {
-      //   this.activateUser();
-      // }
-      axios.get('https://www.bet365.com.cy/en/?#/AS/B1/').then(resp => {
-        let cks = resp.headers['set-cookie'];
-        cks.map(ck => {
-          if (ck.includes('pstk')) {
-            ck = ck.split('pstk=')[1];
-            console.log(ck)
-            ck = ck.split(';')[0]
-            console.log('session id', ck)
-            this.socket.send(`#u\x03Pu\x01__time,S_${ck}u\x00`)
-            return;
-          }
-        })
-      })
-      // setInterval(
-      //   () => this.socket.send(JSON.stringify({ event: "keepAlive" })),
-      //   9000
-      // );
+      if (this.apiKey) {
+        this.activateUser();
+      }
+      setInterval(
+        () => this.socket.send(JSON.stringify({ event: "keepAlive" })),
+        9000
+      );
     };
     this.socket.onmessage = evt => {
-      console.log('message', evt)
-      // const evtData = JSON.parse(evt.data);
-      // const { event, data } = evtData;
-      // console.log("new message", event, data);
+      const evtData = JSON.parse(evt.data);
+      const { event, data } = evtData;
+      console.log("new message", event, data);
       switch (event) {
         case "keyCheckResult": {
           if (!data.code) {
