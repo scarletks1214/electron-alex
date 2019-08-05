@@ -1,7 +1,7 @@
 const JSZip = require("jszip");
 const csv = require("fast-csv");
 const fs = require("fs");
-const unzip = require("unzip");
+const unzipper = require("unzipper");
 const xml2js = require("xml2js");
 const xmlParser = new xml2js.Parser({ attrkey: "ATTR" }).parseString;
 const jsonCSVParser = require("json2csv").parse;
@@ -22,7 +22,7 @@ const io = {
 
       try {
         const csv = jsonCSVParser(data, opts);
-        fs.writeFileSync(fileName, csv);
+        fs.writeFileSync(fileName.split(".")[0] + ".csv", csv);
       } catch (err) {
         console.error(err);
       }
@@ -41,7 +41,7 @@ const io = {
 
     save: function(fileName, data) {
       var json = JSON.stringify(data, null, 2);
-      fs.writeFileSync(fileName, json);
+      fs.writeFileSync(fileName.split(".")[0] + ".json", json);
     }
   },
 
@@ -55,7 +55,7 @@ const io = {
 
     save: function(fileName, data) {
       let json = data.map(JSON.stringify).join("\n");
-      fs.writeFileSync(fileName, json);
+      fs.writeFileSync(fileName.split(".")[0] + ".json", json);
     }
   },
 
@@ -74,14 +74,14 @@ const io = {
     save: function(fileName, data) {
       var builder = new xml2js.Builder();
       var xml = builder.buildObject(data);
-      fs.writeFileSync(fileName, xml);
+      fs.writeFileSync(fileName.split(".")[0] + ".xml", xml);
     }
   },
   zip: {
     load: function(fileName, cb) {
       var items = [];
       fs.createReadStream(fileName)
-        .pipe(unzip.Parse())
+        .pipe(unzipper.Parse())
         .on("entry", function(entry) {
           if (entry.path.match(/\.json$/)) {
             var s = "";
@@ -117,7 +117,7 @@ const io = {
 
       zip
         .generateNodeStream({ type: "nodebuffer", streamFiles: true })
-        .pipe(fs.createWriteStream(fileName))
+        .pipe(fs.createWriteStream(fileName.split(".")[0] + ".zip"))
         .on("finish", function() {
           //console.log(fileName + " written.");
         });

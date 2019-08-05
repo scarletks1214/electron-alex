@@ -29,6 +29,9 @@ class Root extends Component<Props> {
 
     const accPath = __dirname + "/__accs.json";
     const prxPath = __dirname + "/__prxs.json";
+    ipcRenderer.on("electronPath", (event, data) => {
+      console.log("electron ...", data);
+    });
     ipcRenderer.on("actionLog", (event, data) => {
       this.props.changeField(data.email, "actionlog", data.status);
       if (data.status === "Scheming") {

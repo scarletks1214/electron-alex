@@ -10,13 +10,14 @@
  *
  * @flow
  */
-import { app, BrowserWindow, session, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, session, ipcMain, Menu } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import * as taskBot from "./utils/taskBot";
 import profile_converter from "./utils/profile-conveter";
 import * as keytar from "keytar";
 import open from "open";
+import { setTestUrl } from "./utils/checkProxy";
 
 export default class AppUpdater {
   constructor() {
@@ -63,6 +64,7 @@ app.on("window-all-closed", () => {
   }
 });
 app.commandLine.appendSwitch("disable-web-security");
+app.disableHardwareAcceleration();
 app.on("ready", async () => {
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -72,12 +74,12 @@ app.on("ready", async () => {
       }
     });
   });
-  if (
-    process.env.NODE_ENV === "development" ||
-    process.env.DEBUG_PROD === "true"
-  ) {
-    await installExtensions();
-  }
+  // if (
+  //   process.env.NODE_ENV === "development" ||
+  //   process.env.DEBUG_PROD === "true"
+  // ) {
+  //   await installExtensions();
+  // }
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -87,7 +89,10 @@ app.on("ready", async () => {
     height: 200,
     frame: false,
     titleBarStyle: "customButtonsOnHover",
-    transparent: true
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   mainWindow.setResizable(false);
@@ -108,6 +113,8 @@ app.on("ready", async () => {
     }
   });
 
+  //mainWindow.webContents.openDevTools();
+
   mainWindow.webContents.on("new-window", function(event, url) {
     event.preventDefault();
     open(url);
@@ -116,6 +123,44 @@ app.on("ready", async () => {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  var template = [
+    {
+      label: "Application",
+      submenu: [
+        {
+          label: "About Application",
+          selector: "orderFrontStandardAboutPanel:"
+        },
+        { type: "separator" },
+        {
+          label: "Quit",
+          accelerator: "Command+Q",
+          click: function() {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: "Edit",
+      submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        {
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          selector: "selectAll:"
+        }
+      ]
+    }
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   taskBot.setSender(mainWindow.webContents);
 
@@ -161,7 +206,7 @@ ipcMain.on("changeSetting", async (event, data) => {
 
 ipcMain.on("closeWindow", () => {
   mainWindow.webContents.send("saveAccounts");
-  app.quit();
+  app.exit();
 });
 
 ipcMain.on("miniWindow", () => {
@@ -176,14 +221,13 @@ ipcMain.on("convertProfile", (event, data) => {
 });
 
 ipcMain.on("setTestUrl", (event, data) => {
-  taskBot.setTestUrl(data.url);
+  setTestUrl(data.url);
 });
 
 ipcMain.on("activated", (event, data) => {
   console.log("activated");
-  mainWindow.setSize(1360, 768);
-  mainWindow.setResizable(true);
-  mainWindow.setMinimumSize(1360, 768);
+  mainWindow.setSize(1366, 768);
+  mainWindow.setMinimumSize(1366, 768);
   mainWindow.setPosition(200, 100);
   if (data && data.apiKey) keytar.setPassword("apiKey", "OCIO", data.apiKey);
 });

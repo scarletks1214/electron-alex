@@ -1,0 +1,41 @@
+[
+  {
+    "key": 2,
+    "email": "a@a.com",
+    "password": "asdfasdf",
+    "recovery": "",
+    "proxy": "66.70.190.171:8080",
+    "category": "None",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0,
+    "actions": [true, true],
+    "edit": true
+  },
+  {
+    "key": 1,
+    "email": "bundgsan1@gmail.com",
+    "password": "PSmati28",
+    "recovery": "a@a.com",
+    "proxy": "None",
+    "category": "None",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0.13,
+    "actions": [true, true],
+    "edit": true
+  },
+  {
+    "key": 0,
+    "email": "binbry01@gmail.com",
+    "password": "PSmati38",
+    "recovery": "",
+    "proxy": "None",
+    "category": "None",
+    "actionlog": "",
+    "enabled": true,
+    "oneclick": 0.13,
+    "actions": [true, true],
+    "edit": true
+  }
+]

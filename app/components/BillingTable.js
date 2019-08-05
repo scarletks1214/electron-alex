@@ -19,7 +19,7 @@ class BillingTable extends React.Component {
       dataIndex: "FirstNameBilling",
       key: "FirstNameBilling",
       width: 150,
-      render: (firstName, record) => `<${firstName}><${record.LastNameBilling}>`
+      render: (firstName, record) => `${firstName} ${record.LastNameBilling}`
     },
     {
       title: "Card Info",
@@ -41,8 +41,16 @@ class BillingTable extends React.Component {
       title: "Billing Address",
       dataIndex: "address1Billing",
       key: "address1Billing",
-      render: (billing_address, record) =>
-        `<${billing_address}>,<${record.address2Billing}>`,
+      render: (billing_address, record) => {
+        let addr = billing_address;
+        if (record.address2Billing) {
+          addr += `, ${record.address2Billing}`;
+          if (record.address3Billing) {
+            addr += `, ${record.address3Billing}`;
+          }
+        }
+        return addr;
+      },
       width: 300
     },
     {

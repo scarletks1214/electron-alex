@@ -1,75 +1,16 @@
-const express = require("express");
-const http = require("http");
-
-const port = process.env.PORT || 5011;
-const app = express();
-const server = http.createServer(app);
-const bodyParser = require("body-parser");
-
-app.use(bodyParser());
-server.listen(port, () => console.log(`Listening on port ${port}`));
+const path = require("path");
+const performance = require("performance");
+import urlsGsearch from "./urlsGsearch";
+import urlsYoutube from "./urlsYoutube";
+import { basicURL } from "./index";
 
 require("nightmare-wait-for-url");
 const Nightmare = require("nightmare");
 const request = require("request");
 let sender = null;
 
-let youtubes = [
-  "https://www.youtube.com/watch?v=1u3jXdkwLdQ",
-  "https://www.youtube.com/watch?v=0-fns5Qihn8",
-  "https://www.youtube.com/watch?v=OHa0-BlGMLg",
-  "https://www.youtube.com/watch?v=1PkJjcNHZJY",
-  "https://www.youtube.com/watch?v=h4qwZvIYswQ",
-  "https://www.youtube.com/watch?v=HZi9ls9emUE",
-  "https://www.youtube.com/watch?v=CsI4VxJ1IBQ",
-  "https://www.youtube.com/watch?v=wcRYNLSHVm4",
-  "https://www.youtube.com/watch?v=tmdfocdE98M",
-  "https://www.youtube.com/watch?v=4zNAYGiJo5M",
-  "https://www.youtube.com/watch?v=ikCOmABqEPQ",
-  "https://www.youtube.com/watch?v=s8aRC-7sBo8",
-  "https://www.youtube.com/watch?v=CsI4VxJ1IBQ",
-  "https://www.youtube.com/watch?v=7uA0bk5AOyw",
-  "https://www.youtube.com/watch?v=1u3jXdkwLdQ",
-  "https://www.youtube.com/watch?v=eBmAkIdLWYs",
-  "https://www.youtube.com/watch?v=HZi9ls9emUE",
-  "https://www.youtube.com/watch?v=zeuLMV6MgeU",
-  "https://www.youtube.com/watch?v=tawOwZvfZNw",
-  "https://www.youtube.com/watch?v=3W151Vp3Y0w",
-  "https://www.youtube.com/watch?v=utJGnK9D_UQ",
-  "https://www.youtube.com/watch?v=nIXQK8K66U8",
-  "https://www.youtube.com/watch?v=tBiPumGnVT4",
-  "https://www.youtube.com/watch?v=3H8xCyjQykQ",
-  "https://www.youtube.com/watch?v=1u3jXdkwLdQ",
-  "https://www.youtube.com/watch?v=Fux6JsEe1ZU"
-];
-
-let searches = [
-  "react",
-  "angular",
-  "vue",
-  "electron",
-  "stripe api",
-  "google api",
-  "Twilio api",
-  "mongodb",
-  "mysql",
-  "postgresql",
-  "what is github",
-  "what is b2b",
-  "when do you say nope",
-  "graphql",
-  "stripe google",
-  "youtube",
-  "css margin",
-  "scss properties",
-  "what is sass",
-  "what is less",
-  "QA testing",
-  "selenium automation",
-  "web scraping",
-  "what is one click",
-  "what is recaptcha"
-];
+let youtubes = urlsYoutube;
+let searches = urlsGsearch;
 
 let myTargets = [];
 
@@ -136,7 +77,6 @@ let youtube_duration_max = 4;
 let gsearch_duration_min = 0.01;
 let gsearch_duration_max = 0.1;
 let total_loop = 1;
-let testUrl = "https://kith.com";
 
 Nightmare.action(
   "show",
@@ -174,8 +114,16 @@ Nightmare.action(
 );
 
 const runTask = async task => {
-  const electronPath = require("nightmare/node_modules/electron");
-  console.log(electronPath);
+  const electronPath =
+    process.env.NODE_ENV === "development"
+      ? require("nightmare/node_modules/electron")
+      : path.join(
+          process.resourcesPath,
+          "app.asar.unpacked/node_modules/nightmare/node_modules/electron/dist/" +
+            (process.platform === "win32"
+              ? "Electron.exe"
+              : "Electron.app/Contents/MacOS/Electron")
+        );
 
   let proxy, username, password;
   if (task.proxy !== "None") {
@@ -195,7 +143,9 @@ const runTask = async task => {
     electronPath,
     waitTimeout: 3600000,
     gotoTimeout: 3600000,
-    alwaysOnTop: false
+    alwaysOnTop: false,
+    title: "altX Bot Tools",
+    icon: basicURL + "/icon.ico"
   });
 
   if (proxy) {
@@ -211,7 +161,7 @@ const runTask = async task => {
     });
   }
 
-  const bot = { nightmare, email: task.email };
+  const bot = { nightmare, email: task.email, task };
   running_bots.push(bot);
 
   const inputPassword = () => {
@@ -257,18 +207,19 @@ const runTask = async task => {
 
   const id = setTimeout(() => pauseTask(task), randomMsSec(min_run, max_run));
   bot.timeId = id;
+  bot.fTime = performance.now();
 
   sender.send("actionLog", { status: "Marinating", email: task.email });
 
   const targets = myTargets.slice(0);
+  targets.sort(() => Math.random() - 0.5);
   try {
     let length = 0;
     if (gsearch) length += searches.length;
     if (youtube) length += youtubes.length;
     if (length) {
       const percent = parseFloat(100) / length;
-      console.log(percent);
-      sender.send("oneClick", { value: percent, email: task.email });
+      sender.send("oneClick", { value: parseFloat(0.13), email: task.email });
     }
     for (let i = 0; i < total_loop; i += 1) {
       task.currentTarget = 0;
@@ -278,7 +229,7 @@ const runTask = async task => {
         const waitForReady = () => {
           return new Promise((res, rej) => {
             const id = setInterval(async () => {
-              if (nightmare.url() !== "https://a.com/") {
+              if (nightmare.url() !== "https://linkedin.com/") {
                 res(true);
                 clearInterval(id);
               }
@@ -289,7 +240,7 @@ const runTask = async task => {
         await waitForReady();
 
         try {
-          if (target.includes("youtube.com") && youtube) {
+          if (target.toLowerCase().includes("youtube.com") && youtube) {
             console.log(
               "youtube video watching ....",
               target,
@@ -357,6 +308,7 @@ const startTask = task => {
     }
     const id = setTimeout(() => pauseTask(task), randomMsSec(min_run, max_run));
     bot.timeId = id;
+    bot.fTime = performance.now();
   }
 };
 
@@ -389,8 +341,9 @@ const pauseTask = async task => {
     const id = setTimeout(() => addTask(task), randomMsSec(min_slp, max_slp));
     paused_bots.push(running_bots[index]);
     running_bots.timeId = id;
+    running_bots.fTime = performance.now();
     running_bots.splice(index, 1);
-    await nightmare.goto("https://a.com/");
+    await nightmare.goto("https://linkedin.com/");
   } catch (e) {}
 };
 
@@ -469,13 +422,36 @@ const setDuration = (type, duration) => {
   if (type === "slp") {
     min_slp = duration.min;
     max_slp = duration.max;
+
+    paused_bots.map(bot => {
+      const elp = performance.now() - bot.fTime;
+      const rmt = randomMsSec(min_slp, max_slp) - elp;
+      clearTimeout(bot.timeId);
+      if (rmt > 0) {
+        bot.timeId = setTimeout(() => addTask(bot.task), rmt);
+      } else {
+        addTask(bot.task);
+      }
+    });
   } else {
     min_run = duration.min;
     max_slp = duration.max;
+
+    running_bots.map(bot => {
+      const elp = performance.now() - bot.fTime;
+      const rmt = randomMsSec(min_slp, max_slp) - elp;
+      clearTimeout(bot.timeId);
+      if (rmt > 0) {
+        bot.timeId = setTimeout(() => pauseTask(bot.task), rmt);
+      } else {
+        pauseTask(bot.task);
+      }
+    });
   }
 };
 
 const setSettings = (duration, maxProfile, gs, yt) => {
+  console.log("settings ....");
   setDuration("slp", duration.sleep);
   setDuration("run", duration.run);
   max_profiles = maxProfile;
@@ -483,39 +459,6 @@ const setSettings = (duration, maxProfile, gs, yt) => {
   youtube = yt;
 };
 
-app.post("/checkproxy", (req, res) => {
-  console.log("proxy", req.body.myProxy, req.body.username, req.body.password);
-  let proxy = "http://" + req.body.myProxy;
-  if (req.body.username)
-    proxy = `http://${req.body.username}:${req.body.password}@${
-      req.body.myProxy
-    }`;
-
-  let timeId;
-  const r = request.get(
-    testUrl,
-    {
-      proxy,
-      time: true
-    },
-    (err, resp) => {
-      if (err) {
-        clearTimeout(timeId);
-        res.send("bad");
-      } else {
-        clearTimeout(timeId);
-        res.send(resp.elapsedTime + "");
-      }
-    }
-  );
-
-  timeId = setTimeout(() => r.abort(), 5000);
-});
-
 export const setSender = emitter => {
   sender = emitter;
-};
-
-export const setTestUrl = url => {
-  testUrl = url;
 };

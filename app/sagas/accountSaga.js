@@ -8,25 +8,13 @@ import {
   cancel
 } from "redux-saga/effects";
 import { ACCOUNT } from "../reducers/types";
-import axios from "axios";
+import { checkProxy } from "../utils/checkProxy";
 
 function* checkOne(ipaddr, port, username, password) {
   try {
     console.log("checkone", ipaddr, port);
-    const res = yield axios.post(
-      "http://localhost:5011/checkproxy",
-      {
-        myProxy: `${ipaddr}:${port}`,
-        username,
-        password
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    return res.data;
+    const res = yield checkProxy(`${ipaddr}:${port}`, username, password);
+    return res;
   } catch (e) {
     console.log("error", e);
     return false;

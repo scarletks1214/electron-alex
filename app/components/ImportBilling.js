@@ -30,7 +30,7 @@ class ImportBillingModal extends React.Component {
       const index = filePath[0].lastIndexOf("/");
       const tPath = filePath[0].slice(0, index);
       let name = filePath[0].slice(index + 1, filePath[0].length);
-      name = "__" + name;
+      name = ("__" + name).split(".")[0];
 
       ipcRenderer.sendSync("convertProfile", {
         src_path: filePath[0],
@@ -41,7 +41,7 @@ class ImportBillingModal extends React.Component {
 
       setTimeout(
         () =>
-          fs.readFile(tPath + "/" + name, "utf-8", (err, data) => {
+          fs.readFile(tPath + "/" + name + ".json", "utf-8", (err, data) => {
             if (err) {
               alert("An error ocurred reading the file :" + err.message);
               return;

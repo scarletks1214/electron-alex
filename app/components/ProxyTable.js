@@ -274,7 +274,7 @@ class EditableTable extends React.Component {
           columns={columns}
           rowClassName="editable-row"
           pagination={false}
-          scroll={{ y: this.state.height - 250 }}
+          scroll={{ y: this.state.height - 350 }}
         />
       </EditableContext.Provider>
     );

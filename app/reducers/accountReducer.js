@@ -90,6 +90,7 @@ export default function accountReducer(state = initialState, action) {
             key: newkey,
             email: account.email,
             password: account.password,
+            recovery: account.recovery ? account.recovery : "",
             proxy: account.proxy,
             category: account.category ? account.category : "None",
             actionlog: "",

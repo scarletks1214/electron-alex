@@ -5,6 +5,7 @@ import styles from "./AuthContainer.scss";
 import { ipcRenderer } from "electron";
 import macaddress from "macaddress";
 import Websocket from "ws";
+import axios from 'axios'
 
 import { socketUrl, basicURL } from "../utils";
 
@@ -12,32 +13,47 @@ const { app } = require("electron").remote;
 const { Text } = Typography;
 
 class AuthContainer extends React.Component {
-  socket = new Websocket(socketUrl);
+  socket = new Websocket('wss://premws-pt1.365lpodds.com/zap/', 'zap-protocol-v1');
   apiKey = "";
+
   constructor(props) {
     super(props);
 
-    const apiKey = ipcRenderer.sendSync("getApiKey");
     this.state = {
-      authenticated: apiKey ? true : false,
+      authenticated: false,
       loading: false
     };
-    if (apiKey) {
-      ipcRenderer.send("activated");
-    }
   }
   componentDidMount() {
+    this.apiKey = ipcRenderer.sendSync("getApiKey");
     this.socket.onopen = () => {
       console.log("connected");
-      setInterval(
-        () => this.socket.send(JSON.stringify({ event: "keepAlive" })),
-        9000
-      );
+      // if (this.apiKey) {
+      //   this.activateUser();
+      // }
+      axios.get('https://www.bet365.com.cy/en/?#/AS/B1/').then(resp => {
+        let cks = resp.headers['set-cookie'];
+        cks.map(ck => {
+          if (ck.includes('pstk')) {
+            ck = ck.split('pstk=')[1];
+            console.log(ck)
+            ck = ck.split(';')[0]
+            console.log('session id', ck)
+            this.socket.send(`#u\x03Pu\x01__time,S_${ck}u\x00`)
+            return;
+          }
+        })
+      })
+      // setInterval(
+      //   () => this.socket.send(JSON.stringify({ event: "keepAlive" })),
+      //   9000
+      // );
     };
     this.socket.onmessage = evt => {
-      const evtData = JSON.parse(evt.data);
-      const { event, data } = evtData;
-      console.log("new message", event, data);
+      console.log('message', evt)
+      // const evtData = JSON.parse(evt.data);
+      // const { event, data } = evtData;
+      // console.log("new message", event, data);
       switch (event) {
         case "keyCheckResult": {
           if (!data.code) {

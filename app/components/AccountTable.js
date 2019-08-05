@@ -57,9 +57,9 @@ class EditableCell extends React.Component {
       case "category":
         return <Input style={{ width: "70px" }} />;
       case "password":
-        return <InputPassword style={{ width: "110px" }} />;
+        return <InputPassword style={{ width: "100px" }} />;
       case "email":
-        return <Input style={{ width: "180px" }} />;
+        return <Input style={{ width: "165px" }} />;
       case "proxy":
         return (
           <ProxySelect
@@ -70,7 +70,7 @@ class EditableCell extends React.Component {
           />
         );
       default:
-        return <Input style={{ width: "70px" }} />;
+        return <Input style={{ width: "100px" }} />;
     }
   };
 
@@ -91,9 +91,9 @@ class EditableCell extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {getFieldDecorator(dataIndex, {
               rules: [
-                dataIndex == "email"
+                dataIndex == "email" || dataIndex === "recovery"
                   ? {
-                      required: true,
+                      required: dataIndex === "email" ? true : false,
                       type: "email",
                       message: `Please Input Valid Email!`
                     }
@@ -148,6 +148,12 @@ class EditableTable extends React.Component {
           value={text}
         />
       )
+    },
+    {
+      title: "Recovery",
+      dataIndex: "recovery",
+      key: "recovery",
+      editable: true
     },
     {
       title: "Proxy",
@@ -340,8 +346,8 @@ class EditableTable extends React.Component {
   }
 
   updateWindowDimensions() {
-    const divisions = [14, 6, 10, 2.7, 14, 15, 15, 15];
-    for (let i = 0; i < 8; i += 1) {
+    const divisions = [15, 7, 11, 11, 2.9, 16, 16, 16, 16];
+    for (let i = 0; i < 9; i += 1) {
       this.columns[i].width = (window.innerWidth - 150) / divisions[i];
     }
     this.setState({ width: window.innerWidth, height: window.innerHeight });
@@ -374,14 +380,17 @@ class EditableTable extends React.Component {
 
     return (
       <div>
-        <EditableContext.Provider value={this.props.form}>
+        <EditableContext.Provider
+          value={this.props.form}
+          style={{ fontSize: "8px" }}
+        >
           <Table
             components={components}
             dataSource={this.props.data}
             columns={columns}
             rowClassName="editable-row"
             pagination={false}
-            scroll={{ y: this.state.height - 250 }}
+            scroll={{ y: this.state.height - 330 }}
             rowKey="email"
           />
         </EditableContext.Provider>

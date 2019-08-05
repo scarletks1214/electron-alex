@@ -327,6 +327,18 @@ eval("module.exports = macaddress;\n\n//# sourceURL=webpack://renderer/external_
 
 /***/ }),
 
+/***/ "menu":
+/*!***********************!*\
+  !*** external "menu" ***!
+  \***********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = menu;\n\n//# sourceURL=webpack://renderer/external_%22menu%22?");
+
+/***/ }),
+
 /***/ "nightmare":
 /*!****************************!*\
   !*** external "nightmare" ***!
@@ -372,6 +384,18 @@ eval("module.exports = open;\n\n//# sourceURL=webpack://renderer/external_%22ope
 /***/ (function(module, exports) {
 
 eval("module.exports = path;\n\n//# sourceURL=webpack://renderer/external_%22path%22?");
+
+/***/ }),
+
+/***/ "performance":
+/*!******************************!*\
+  !*** external "performance" ***!
+  \******************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+eval("module.exports = performance;\n\n//# sourceURL=webpack://renderer/external_%22performance%22?");
 
 /***/ }),
 
@@ -567,15 +591,15 @@ eval("module.exports = sqlite3;\n\n//# sourceURL=webpack://renderer/external_%22
 
 /***/ }),
 
-/***/ "unzip":
-/*!************************!*\
-  !*** external "unzip" ***!
-  \************************/
+/***/ "unzipper":
+/*!***************************!*\
+  !*** external "unzipper" ***!
+  \***************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports) {
 
-eval("module.exports = unzip;\n\n//# sourceURL=webpack://renderer/external_%22unzip%22?");
+eval("module.exports = unzipper;\n\n//# sourceURL=webpack://renderer/external_%22unzipper%22?");
 
 /***/ }),
 
